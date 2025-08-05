@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:daggerheart_game_master_companion/extensions/campaign_extensions.dart';
 import 'package:daggerheart_game_master_companion/models/campaign.dart';
 import 'package:daggerheart_game_master_companion/services/data/data_source.dart';
@@ -10,8 +12,9 @@ abstract class CampaignRepository {
 
 class CampaignRepositoryImpl implements CampaignRepository {
   final LocalDataSource _dataSource;
+  final JsonEncoder _jsonEncoder;
 
-  CampaignRepositoryImpl(this._dataSource);
+  CampaignRepositoryImpl(this._dataSource, this._jsonEncoder);
 
   @override
   Future<Iterable<Campaign>> getAllCampaigns() async {
@@ -23,7 +26,7 @@ class CampaignRepositoryImpl implements CampaignRepository {
 
   @override
   Future<void> saveCampaign(Campaign campaign) {
-    final json = campaign.toJsonString();
+    final json = campaign.toJsonString(_jsonEncoder);
     return _dataSource.saveCampaign(campaign.key, json);
   }
 }

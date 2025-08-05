@@ -38,6 +38,7 @@ dependencies:
   intl: any
   flutter_localizations:
     sdk: flutter
+  flutter_simple_dependency_injection: ^2.0.0
 
 dev_dependencies:
   flutter_test:

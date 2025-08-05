@@ -1,8 +1,9 @@
+import 'package:daggerheart_game_master_companion/di/dependency_injector.dart';
 import 'package:daggerheart_game_master_companion/ui/base/view_model.dart';
 import 'package:flutter/material.dart';
 
 abstract class DaggerheartState<T extends StatefulWidget, VM extends ViewModel> extends State<T> implements EventObserver {
-  VM viewModel;
+  late VM viewModel;
   late BaseState _state;
 
   @override
@@ -17,7 +18,8 @@ abstract class DaggerheartState<T extends StatefulWidget, VM extends ViewModel> 
     });
   }
 
-  DaggerheartState(this.viewModel) {
+  DaggerheartState({VM? vm}) {
+    viewModel = vm ?? DependencyInjector.resolve<VM>();
     _state = viewModel.initialState;
   }
 
