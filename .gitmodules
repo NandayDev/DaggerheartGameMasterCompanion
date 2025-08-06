@@ -1,0 +1,3 @@
+[submodule "assets/srd"]
+	path = assets/srd
+	url = https://github.com/NandayDev/DaggerheartJsonSRD

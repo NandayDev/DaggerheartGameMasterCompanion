@@ -5,7 +5,11 @@ import 'package:path/path.dart' as path;
 abstract class LocalDataSource {
   Future<Iterable<String>> getAllCampaigns();
 
-  Future<void> saveCampaign(String key, String campaign);
+  Future<void> saveCampaign({required String key, required String campaign});
+
+  Future<String> getPlayerCharacter(String characterKey);
+
+  Future<void> savePlayerCharacter({required String key, required String playerCharacter});
 }
 
 class LocalJsonDataSource implements LocalDataSource {
@@ -21,10 +25,27 @@ class LocalJsonDataSource implements LocalDataSource {
   }
 
   @override
-  Future<void> saveCampaign(String key, String campaign) async {
+  Future<void> saveCampaign({required String key, required String campaign}) async {
     final file = File(path.join(_storageDirectory.path, _CAMPAIGNS_COLLECTION, "$key.json"));
     await file.create();
     await file.writeAsString(campaign);
+  }
+
+  @override
+  Future<String> getPlayerCharacter(String characterKey) async {
+    final file = File(path.join(_storageDirectory.path, _PLAYER_CHARACTERS_COLLECTION, "$characterKey.json"));
+    final exists = await file.exists();
+    if (!exists) {
+      throw PlayerCharacterNotFoundException("Player character file with key $characterKey not found");
+    }
+    return await file.readAsString();
+  }
+
+  @override
+  Future<void> savePlayerCharacter({required String key, required String playerCharacter}) async {
+    final file = File(path.join(_storageDirectory.path, _PLAYER_CHARACTERS_COLLECTION, "$key.json"));
+    await file.create();
+    await file.writeAsString(playerCharacter);
   }
 
   Future<List<FileSystemEntity>> _getCollection(String name) async {
@@ -43,4 +64,11 @@ class LocalJsonDataSource implements LocalDataSource {
   }
 
   static const _CAMPAIGNS_COLLECTION = "campaigns";
+  static const _PLAYER_CHARACTERS_COLLECTION = "player_characters";
+}
+
+class PlayerCharacterNotFoundException implements IOException {
+  final String message;
+
+  PlayerCharacterNotFoundException(this.message);
 }
