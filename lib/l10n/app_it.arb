@@ -1,4 +1,7 @@
 {
   "campaignSelection": "Selezione campagna",
-  "combat": "Combattimento"
+  "combat": "Combattimento",
+  "campaignSelectionAddCampaignHint": "Crea una nuova campagna per iniziare!",
+  "campaignSelectionAddCampaign": "Crea una nuova campagna",
+  "campaignSelectionError": "Errore nel caricamento della campagna. I dati potrebbero essere stati alterati."
 }

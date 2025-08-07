@@ -1,4 +1,7 @@
 {
   "campaignSelection": "Campaign selection",
-  "combat": "Combat"
+  "combat": "Combat",
+  "campaignSelectionAddCampaignHint": "No campaigns saved. Why don't you start a new one?",
+  "campaignSelectionAddCampaign": "Create new campaign",
+  "campaignSelectionError": "Error while loading this campaign. Data may have been altered."
 }

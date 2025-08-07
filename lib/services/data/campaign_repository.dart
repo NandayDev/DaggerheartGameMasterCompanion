@@ -4,7 +4,6 @@ import 'package:daggerheart_game_master_companion/models/campaign.dart';
 import 'package:daggerheart_game_master_companion/models/srd/player_character.dart';
 import 'package:daggerheart_game_master_companion/services/data/data_source.dart';
 import 'package:daggerheart_game_master_companion/services/data/player_characters_repository.dart';
-import 'package:daggerheart_game_master_companion/services/srd_parser.dart';
 import 'package:daggerheart_game_master_companion/shared/result.dart';
 
 abstract class CampaignRepository {
@@ -19,9 +18,8 @@ class CampaignRepositoryImpl implements CampaignRepository {
   final LocalDataSource _dataSource;
   final PlayerCharacterRepository _playerCharacterRepository;
   final JsonEncoder _jsonEncoder;
-  final SrdParser _srdParser;
 
-  CampaignRepositoryImpl(this._dataSource, this._playerCharacterRepository, this._jsonEncoder, this._srdParser);
+  CampaignRepositoryImpl(this._dataSource, this._playerCharacterRepository, this._jsonEncoder);
 
   @override
   Campaign? selectedCampaign;

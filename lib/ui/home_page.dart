@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: theme.primaryColor,
+        backgroundColor: theme.primaryColorLight,
         title: Text(_selectedDrawerItem.getTitle(context)),
         leading: Builder(
           builder: (context) => IconButton(

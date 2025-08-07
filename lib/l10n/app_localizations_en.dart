@@ -14,4 +14,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get combat => 'Combat';
+
+  @override
+  String get campaignSelectionAddCampaignHint => 'No campaigns saved. Why don\'t you start a new one?';
+
+  @override
+  String get campaignSelectionAddCampaign => 'Create new campaign';
+
+  @override
+  String get campaignSelectionError => 'Error while loading this campaign. Data may have been altered.';
 }

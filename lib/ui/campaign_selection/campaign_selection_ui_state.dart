@@ -6,3 +6,7 @@ class LoadedCampaignSelectionUiState extends BaseState {
 
   LoadedCampaignSelectionUiState({required this.uiModels}) : super(isLoading: false);
 }
+
+class EmptyCampaignSelectionUiState extends BaseState {
+  EmptyCampaignSelectionUiState() : super(isLoading: false);
+}

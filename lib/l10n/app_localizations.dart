@@ -109,6 +109,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Combat'**
   String get combat;
+
+  /// No description provided for @campaignSelectionAddCampaignHint.
+  ///
+  /// In en, this message translates to:
+  /// **'No campaigns saved. Why don\'t you start a new one?'**
+  String get campaignSelectionAddCampaignHint;
+
+  /// No description provided for @campaignSelectionAddCampaign.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new campaign'**
+  String get campaignSelectionAddCampaign;
+
+  /// No description provided for @campaignSelectionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error while loading this campaign. Data may have been altered.'**
+  String get campaignSelectionError;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

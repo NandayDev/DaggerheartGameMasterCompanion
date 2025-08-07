@@ -14,4 +14,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get combat => 'Combattimento';
+
+  @override
+  String get campaignSelectionAddCampaignHint => 'Crea una nuova campagna per iniziare!';
+
+  @override
+  String get campaignSelectionAddCampaign => 'Crea una nuova campagna';
+
+  @override
+  String get campaignSelectionError => 'Errore nel caricamento della campagna. I dati potrebbero essere stati alterati.';
 }
