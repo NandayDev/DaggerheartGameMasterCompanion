@@ -4,6 +4,7 @@ import 'package:daggerheart_game_master_companion/models/srd/domain.dart';
 
 class PlayerCharacter {
   final String key;
+  final String name;
   final DaggerheartClass daggerheartClass;
   final int level;
   final Domain domain;
@@ -12,6 +13,7 @@ class PlayerCharacter {
 
   PlayerCharacter({
     required this.key,
+    required this.name,
     required this.daggerheartClass,
     required this.level,
     required this.domain,

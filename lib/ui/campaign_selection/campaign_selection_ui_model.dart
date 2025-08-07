@@ -3,6 +3,9 @@ class CampaignSelectionUiModel {
   final String name;
   final String startDate;
   final String characters;
+  final bool isError;
 
-  CampaignSelectionUiModel({required this.key, required this.name, required this.startDate, required this.characters});
+  CampaignSelectionUiModel.success({required this.key, required this.name, required this.startDate, required this.characters}) : isError = false;
+
+  CampaignSelectionUiModel.error() : key = "", name = "", startDate = "", characters = "", isError = true;
 }

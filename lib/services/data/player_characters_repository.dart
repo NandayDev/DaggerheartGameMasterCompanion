@@ -26,6 +26,7 @@ class PlayerCharacterRepositoryImpl implements PlayerCharacterRepository {
   Future<Attempt> savePlayerCharacter(PlayerCharacter playerCharacter) async {
     final json = {
       _PLAYER_KEY: playerCharacter.key,
+      _PLAYER_NAME: playerCharacter.name,
       _PLAYER_CLASS_KEY: playerCharacter.daggerheartClass.key,
       _PLAYER_LEVEL: playerCharacter.level,
       _PLAYER_DOMAIN_KEY: playerCharacter.domain.key,
@@ -74,6 +75,7 @@ class PlayerCharacterRepositoryImpl implements PlayerCharacterRepository {
 
     final playerCharacter = PlayerCharacter(
         key: key,
+        name: playerCharacterJson[_PLAYER_NAME],
         daggerheartClass: daggerheartClass,
         level: playerCharacterJson[_PLAYER_LEVEL],
         domain: domain,
@@ -85,6 +87,7 @@ class PlayerCharacterRepositoryImpl implements PlayerCharacterRepository {
   }
 
   static const _PLAYER_KEY = "key";
+  static const _PLAYER_NAME = "name";
   static const _PLAYER_CLASS_KEY = "class";
   static const _PLAYER_LEVEL = "level";
   static const _PLAYER_DOMAIN_KEY = "domain";
