@@ -54,6 +54,10 @@ extension IterableExtensions<E> on Iterable<E> {
     list.sort((a, b) => comparer(a).compareTo(comparer(b)));
     return list;
   }
+
+  List<T> castToList<T>() {
+    return cast<T>().toList();
+  }
 }
 
 extension IntIterableExtension on Iterable<int> {

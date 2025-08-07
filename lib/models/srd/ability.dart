@@ -1,6 +1,7 @@
 import 'package:daggerheart_game_master_companion/models/srd/domain.dart';
 
 class Ability {
+  final String key;
   final String name;
   final int level;
   final AbilityType type;
@@ -9,7 +10,7 @@ class Ability {
 
   late Domain domain;
 
-  Ability({required this.name, required this.level, required this.type, required this.recallCost, required this.descriptions});
+  Ability({required this.key, required this.name, required this.level, required this.type, required this.recallCost, required this.descriptions});
 }
 
 enum AbilityType { Ability, Spell, Grimoire }

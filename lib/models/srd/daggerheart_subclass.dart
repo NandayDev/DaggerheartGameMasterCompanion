@@ -2,6 +2,7 @@ import 'package:daggerheart_game_master_companion/models/srd/feature.dart';
 import 'package:daggerheart_game_master_companion/models/srd/trait.dart';
 
 class DaggerheartSubclass {
+  final String key;
   final String name;
   final String description;
   final Trait? spellcastTrait;
@@ -10,6 +11,7 @@ class DaggerheartSubclass {
   final List<Feature> masteryFeatures;
 
   DaggerheartSubclass({
+    required this.key,
     required this.name,
     required this.description,
     required this.spellcastTrait,

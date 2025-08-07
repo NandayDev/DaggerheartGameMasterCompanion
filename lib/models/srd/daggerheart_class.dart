@@ -3,6 +3,7 @@ import 'package:daggerheart_game_master_companion/models/srd/domain.dart';
 import 'package:daggerheart_game_master_companion/models/srd/feature.dart';
 
 class DaggerheartClass {
+  final String key;
   final String name;
   final String description;
   final List<Domain> domains;
@@ -16,6 +17,7 @@ class DaggerheartClass {
   final List<String> connections;
 
   DaggerheartClass({
+    required this.key,
     required this.name,
     required this.description,
     required this.domains,

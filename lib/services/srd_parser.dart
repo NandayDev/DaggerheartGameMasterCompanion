@@ -32,30 +32,31 @@ class SrdParserImpl implements SrdParser {
       final classesString = await rootBundle.loadString(_CLASSES);
       final classesJson = jsonDecode(classesString) as Map<String, dynamic>;
       for (final classEntry in classesJson.entries) {
-        final classJson = classEntry.value;
-        final String className = classJson["name"];
+        final json = classEntry.value;
+        final String className = json["name"];
         final List<Domain> domains = [];
-        for (final domainName in classJson["domains"]) {
+        for (final domainName in json["domains"]) {
           final domain = await getDomain(domainName);
           domains.add(domain!);
         }
         final List<DaggerheartSubclass> subclasses = [];
-        for (final subclassName in classJson["subclasses"]) {
+        for (final subclassName in json["subclasses"]) {
           final subclass = await getSubclass(subclassName);
           subclasses.add(subclass!);
         }
         final daggerheartClass = DaggerheartClass(
+          key: json["key"],
           name: className,
-          description: classJson["description"],
+          description: json["description"],
           domains: domains,
-          startingEvasion: classJson["startingEvasion"],
-          startingHitPoints: classJson["startingHitPoints"],
-          classItems: classJson["classItems"],
-          hopeFeature: _parseFeature(classJson["hopeFeature"]),
-          classFeatures: _parseFeatureList(classJson["classFeatures"]),
+          startingEvasion: json["startingEvasion"],
+          startingHitPoints: json["startingHitPoints"],
+          classItems: json["classItems"],
+          hopeFeature: _parseFeature(json["hopeFeature"]),
+          classFeatures: _parseFeatureList(json["classFeatures"]),
           subclasses: subclasses,
-          backgroundQuestions: classJson["backgroundQuestions"].cast<String>().toList(),
-          connections: classJson["connections"].cast<String>().toList(),
+          backgroundQuestions: json["backgroundQuestions"].cast<String>().toList(),
+          connections: json["connections"].cast<String>().toList(),
         );
         map[classEntry.key] = daggerheartClass;
       }
@@ -71,9 +72,9 @@ class SrdParserImpl implements SrdParser {
       final domainsString = await rootBundle.loadString(_DOMAINS);
       final domainsJson = jsonDecode(domainsString) as Map<String, dynamic>;
       for (final domainEntry in domainsJson.entries) {
-        final domainJson = domainEntry.value;
-        final String domainName = domainJson["name"];
-        final abilitiesByLevelJson = domainJson["abilitiesByLevel"] as Map<String, dynamic>;
+        final json = domainEntry.value;
+        final String domainName = json["name"];
+        final abilitiesByLevelJson = json["abilitiesByLevel"] as Map<String, dynamic>;
         final abilitiesByLevel = <int, List<Ability>>{};
         for (final entry in abilitiesByLevelJson.entries) {
           final abilities = List<Ability>.empty(growable: true);
@@ -85,7 +86,7 @@ class SrdParserImpl implements SrdParser {
           }
           abilitiesByLevel[level] = abilities;
         }
-        final domain = Domain(name: domainName, description: domainJson["description"], abilitiesByLevel: abilitiesByLevel);
+        final domain = Domain(key: json["key"], name: domainName, description: json["description"], abilitiesByLevel: abilitiesByLevel);
         for (final abilityList in abilitiesByLevel.values) {
           for (final ability in abilityList) {
             ability.domain = domain;
@@ -105,15 +106,16 @@ class SrdParserImpl implements SrdParser {
       final abilitiesString = await rootBundle.loadString(_ABILITIES);
       final abilitiesJson = jsonDecode(abilitiesString) as Map<String, dynamic>;
       for (final abilityEntry in abilitiesJson.entries) {
-        final abilityJson = abilityEntry.value;
-        final String abilityName = abilityJson["name"];
+        final json = abilityEntry.value;
+        final String abilityName = json["name"];
 
         final ability = Ability(
+          key: json["key"],
           name: abilityName,
-          level: abilityJson["level"],
-          type: _abilityTypeMap[abilityJson["type"]]!,
-          recallCost: abilityJson["recallCost"],
-          descriptions: (abilityJson["descriptions"] as List<dynamic>).cast<String>().toList(),
+          level: json["level"],
+          type: _abilityTypeMap[json["type"]]!,
+          recallCost: json["recallCost"],
+          descriptions: (json["descriptions"] as List<dynamic>).cast<String>().toList(),
         );
         map[abilityEntry.key] = ability;
       }
@@ -129,15 +131,16 @@ class SrdParserImpl implements SrdParser {
       final subclassesString = await rootBundle.loadString(_SUBCLASSES);
       final subclassesJson = jsonDecode(subclassesString) as Map<String, dynamic>;
       for (final subclassEntry in subclassesJson.entries) {
-        final subclassJson = subclassEntry.value;
-        final String subclassName = subclassJson["name"];
+        final json = subclassEntry.value;
+        final String subclassName = json["name"];
         final subclass = DaggerheartSubclass(
+          key: json["key"],
           name: subclassName,
-          description: subclassJson["description"],
-          spellcastTrait: subclassJson["spellcastTrait"] == null ? null : _traitMap[subclassJson["spellcastTrait"]],
-          foundationFeatures: _parseFeatureList(subclassJson["foundationFeatures"]),
-          specializationFeatures: _parseFeatureList(subclassJson["specializationFeatures"]),
-          masteryFeatures: _parseFeatureList(subclassJson["masteryFeatures"]),
+          description: json["description"],
+          spellcastTrait: json["spellcastTrait"] == null ? null : _traitMap[json["spellcastTrait"]],
+          foundationFeatures: _parseFeatureList(json["foundationFeatures"]),
+          specializationFeatures: _parseFeatureList(json["specializationFeatures"]),
+          masteryFeatures: _parseFeatureList(json["masteryFeatures"]),
         );
         map[subclassEntry.key] = subclass;
       }
