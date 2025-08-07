@@ -49,7 +49,9 @@ class PlayerCharacterRepositoryImpl implements PlayerCharacterRepository {
     }
     final playerCharacterJson = jsonDecode(playerCharacterString);
 
-    DaggerheartClass daggerheartClass = await _srdParser.getClass(playerCharacterJson[_PLAYER_CLASS]);
+    DaggerheartClass? daggerheartClass = await _srdParser.getClass(playerCharacterJson[_PLAYER_CLASS]);
+
+    throw UnimplementedError();
   }
 
   static const _PLAYER_KEY = "key";

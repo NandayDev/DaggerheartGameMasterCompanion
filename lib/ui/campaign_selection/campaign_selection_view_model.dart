@@ -1,7 +1,6 @@
 import 'package:daggerheart_game_master_companion/extensions/list_extensions.dart';
 import 'package:daggerheart_game_master_companion/services/data/campaign_repository.dart';
 import 'package:daggerheart_game_master_companion/ui/base/view_model.dart';
-import 'package:daggerheart_game_master_companion/ui/campaign_selection/campaign_selection_ui_model.dart';
 import 'package:daggerheart_game_master_companion/ui/campaign_selection/campaign_selection_ui_state.dart';
 
 class CampaignSelectionViewModel extends ViewModel {
@@ -12,9 +11,11 @@ class CampaignSelectionViewModel extends ViewModel {
   void initialize() async {
     final campaigns = await _campaignRepository.getAllCampaigns();
     final uiModels = campaigns.mapToList((campaign) {
-      return CampaignSelectionUiModel(key: campaign.key, name: campaign.name, startDate: campaign.created.toString(), characters: "" /*TODO*/);
+      //return CampaignSelectionUiModel(key: campaign.key, name: campaign.name, startDate: campaign.created.toString(), characters: "" /*TODO*/);
     });
-    final uiState = LoadedCampaignSelectionUiState(uiModels: uiModels);
+    throw UnimplementedError();
+
+    final uiState = LoadedCampaignSelectionUiState(uiModels: []);
     notify(uiState);
   }
 }

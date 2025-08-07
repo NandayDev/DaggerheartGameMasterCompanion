@@ -1,1 +1,1 @@
-enum Trait { STRENGTH, AGILITY, FINESSE, INSTINCT, KNOWLEDGE, PRESENCE }
+enum Trait { Strength, Agility, Finesse, Instinct, Knowledge, Presence }
