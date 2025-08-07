@@ -10,6 +10,18 @@ class AppLocalizationsIt extends AppLocalizations {
   AppLocalizationsIt([String locale = 'it']) : super(locale);
 
   @override
+  String get cancel => 'Annulla';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get confirm => 'Conferma';
+
+  @override
+  String get save => 'Salva';
+
+  @override
   String get campaignSelection => 'Selezione campagna';
 
   @override
@@ -23,4 +35,19 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get campaignSelectionError => 'Errore nel caricamento della campagna. I dati potrebbero essere stati alterati.';
+
+  @override
+  String get addCampaignDialogNewCampaign => 'Nuova campagna';
+
+  @override
+  String get addCampaignDialogCampaignName => 'Nome della campagna';
+
+  @override
+  String get addCampaignDialogCharacters => 'Personaggi';
+
+  @override
+  String get addCampaignDialogNoCharacterAdded => 'Nessun personaggio aggiunto';
+
+  @override
+  String get addCampaignDialogAddCharacter => 'Aggiungi personaggio';
 }

@@ -98,6 +98,30 @@ abstract class AppLocalizations {
     Locale('it'),
   ];
 
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
   /// No description provided for @campaignSelection.
   ///
   /// In en, this message translates to:
@@ -127,6 +151,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error while loading this campaign. Data may have been altered.'**
   String get campaignSelectionError;
+
+  /// No description provided for @addCampaignDialogNewCampaign.
+  ///
+  /// In en, this message translates to:
+  /// **'New campaign'**
+  String get addCampaignDialogNewCampaign;
+
+  /// No description provided for @addCampaignDialogCampaignName.
+  ///
+  /// In en, this message translates to:
+  /// **'Campaign name'**
+  String get addCampaignDialogCampaignName;
+
+  /// No description provided for @addCampaignDialogCharacters.
+  ///
+  /// In en, this message translates to:
+  /// **'Player characters'**
+  String get addCampaignDialogCharacters;
+
+  /// No description provided for @addCampaignDialogNoCharacterAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'No character added'**
+  String get addCampaignDialogNoCharacterAdded;
+
+  /// No description provided for @addCampaignDialogAddCharacter.
+  ///
+  /// In en, this message translates to:
+  /// **'Add character'**
+  String get addCampaignDialogAddCharacter;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

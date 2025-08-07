@@ -1,5 +1,6 @@
 import 'package:daggerheart_game_master_companion/l10n/app_localizations.dart';
 import 'package:daggerheart_game_master_companion/ui/base/daggerheart_state.dart';
+import 'package:daggerheart_game_master_companion/ui/campaign_selection/add_campaign_dialog/add_campaign_dialog.dart';
 import 'package:daggerheart_game_master_companion/ui/campaign_selection/campaign_selection_ui_model.dart';
 import 'package:daggerheart_game_master_companion/ui/campaign_selection/campaign_selection_ui_state.dart';
 import 'package:daggerheart_game_master_companion/ui/campaign_selection/campaign_selection_view_model.dart';
@@ -41,8 +42,9 @@ class _CampaignSelectionPageState extends DaggerheartState<CampaignSelectionPage
             MaterialButton(
               color: theme.primaryColorLight,
               // textColor: Theme.of(context).primaryColorLight,
-              onPressed: () {
-                // TODO
+              onPressed: () async {
+                await showCreateCampaignDialog(context);
+                viewModel.initialize();
               },
               child: Text(localizations.campaignSelectionAddCampaign),
             ),

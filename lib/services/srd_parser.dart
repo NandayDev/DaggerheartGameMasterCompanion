@@ -10,6 +10,7 @@ import 'package:daggerheart_game_master_companion/models/srd/trait.dart';
 import 'package:flutter/services.dart';
 
 abstract class SrdParser {
+  Future<Iterable<DaggerheartClass>> getAllClasses();
   Future<DaggerheartClass?> getClass(String name);
 
   Future<Domain?> getDomain(String name);
@@ -26,42 +27,14 @@ class SrdParserImpl implements SrdParser {
   Map<String, DaggerheartSubclass>? _subclassesCache;
 
   @override
+  Future<Iterable<DaggerheartClass>> getAllClasses() async {
+    await _fillClassesCache();
+    return _classesCache!.values;
+  }
+
+  @override
   Future<DaggerheartClass?> getClass(String name) async {
-    if (_classesCache == null) {
-      final map = <String, DaggerheartClass>{};
-      final classesString = await rootBundle.loadString(_CLASSES);
-      final classesJson = jsonDecode(classesString) as Map<String, dynamic>;
-      for (final classEntry in classesJson.entries) {
-        final json = classEntry.value;
-        final String className = json["name"];
-        final List<Domain> domains = [];
-        for (final domainName in json["domains"]) {
-          final domain = await getDomain(domainName);
-          domains.add(domain!);
-        }
-        final List<DaggerheartSubclass> subclasses = [];
-        for (final subclassName in json["subclasses"]) {
-          final subclass = await getSubclass(subclassName);
-          subclasses.add(subclass!);
-        }
-        final daggerheartClass = DaggerheartClass(
-          key: json["key"],
-          name: className,
-          description: json["description"],
-          domains: domains,
-          startingEvasion: json["startingEvasion"],
-          startingHitPoints: json["startingHitPoints"],
-          classItems: json["classItems"],
-          hopeFeature: _parseFeature(json["hopeFeature"]),
-          classFeatures: _parseFeatureList(json["classFeatures"]),
-          subclasses: subclasses,
-          backgroundQuestions: json["backgroundQuestions"].cast<String>().toList(),
-          connections: json["connections"].cast<String>().toList(),
-        );
-        map[classEntry.key] = daggerheartClass;
-      }
-      _classesCache = map;
-    }
+    await _fillClassesCache();
     return _classesCache![name];
   }
 
@@ -147,6 +120,44 @@ class SrdParserImpl implements SrdParser {
       _subclassesCache = map;
     }
     return _subclassesCache![name];
+  }
+
+  Future<void> _fillClassesCache() async {
+    if (_classesCache == null) {
+      final map = <String, DaggerheartClass>{};
+      final classesString = await rootBundle.loadString(_CLASSES);
+      final classesJson = jsonDecode(classesString) as Map<String, dynamic>;
+      for (final classEntry in classesJson.entries) {
+        final json = classEntry.value;
+        final String className = json["name"];
+        final List<Domain> domains = [];
+        for (final domainName in json["domains"]) {
+          final domain = await getDomain(domainName);
+          domains.add(domain!);
+        }
+        final List<DaggerheartSubclass> subclasses = [];
+        for (final subclassName in json["subclasses"]) {
+          final subclass = await getSubclass(subclassName);
+          subclasses.add(subclass!);
+        }
+        final daggerheartClass = DaggerheartClass(
+          key: json["key"],
+          name: className,
+          description: json["description"],
+          domains: domains,
+          startingEvasion: json["startingEvasion"],
+          startingHitPoints: json["startingHitPoints"],
+          classItems: json["classItems"],
+          hopeFeature: _parseFeature(json["hopeFeature"]),
+          classFeatures: _parseFeatureList(json["classFeatures"]),
+          subclasses: subclasses,
+          backgroundQuestions: json["backgroundQuestions"].cast<String>().toList(),
+          connections: json["connections"].cast<String>().toList(),
+        );
+        map[classEntry.key] = daggerheartClass;
+      }
+      _classesCache = map;
+    }
   }
 
   static Feature _parseFeature(dynamic json) =>

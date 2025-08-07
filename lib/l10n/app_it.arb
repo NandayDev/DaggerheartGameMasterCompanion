@@ -1,7 +1,17 @@
 {
+  "cancel": "Annulla",
+  "ok": "OK",
+  "confirm": "Conferma",
+  "save": "Salva",
   "campaignSelection": "Selezione campagna",
   "combat": "Combattimento",
   "campaignSelectionAddCampaignHint": "Crea una nuova campagna per iniziare!",
   "campaignSelectionAddCampaign": "Crea una nuova campagna",
-  "campaignSelectionError": "Errore nel caricamento della campagna. I dati potrebbero essere stati alterati."
+  "campaignSelectionError": "Errore nel caricamento della campagna. I dati potrebbero essere stati alterati.",
+  "addCampaignDialogNewCampaign": "Nuova campagna",
+  "addCampaignDialogCampaignName": "Nome della campagna",
+  "addCampaignDialogCharacters": "Personaggi",
+  "addCampaignDialogNoCharacterAdded": "Nessun personaggio aggiunto",
+  "addCampaignDialogAddCharacter": "Aggiungi personaggio",
+  "addCharacterDialogTitle": "Crea nuovo personaggio"
 }

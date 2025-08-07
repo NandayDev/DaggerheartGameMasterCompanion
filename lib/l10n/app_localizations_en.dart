@@ -10,6 +10,18 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get save => 'Save';
+
+  @override
   String get campaignSelection => 'Campaign selection';
 
   @override
@@ -23,4 +35,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get campaignSelectionError => 'Error while loading this campaign. Data may have been altered.';
+
+  @override
+  String get addCampaignDialogNewCampaign => 'New campaign';
+
+  @override
+  String get addCampaignDialogCampaignName => 'Campaign name';
+
+  @override
+  String get addCampaignDialogCharacters => 'Player characters';
+
+  @override
+  String get addCampaignDialogNoCharacterAdded => 'No character added';
+
+  @override
+  String get addCampaignDialogAddCharacter => 'Add character';
 }
