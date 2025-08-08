@@ -7,7 +7,7 @@ class ChoiceUiModel {
 
   String get key => type.toString() + (selectedChild?.key?.toString() ?? "");
 
-  ChoiceUiModel({required this.type, required this.isEnabled, required this.isError, required this.selectedChild, required this.children});
+  const ChoiceUiModel({required this.type, required this.isEnabled, required this.isError, required this.selectedChild, required this.children});
 
   ChoiceUiModel select(ChoiceChildUiModel? selectedChild) =>
       ChoiceUiModel(type: type, isEnabled: isEnabled, isError: isError, selectedChild: selectedChild, children: children);
@@ -35,5 +35,6 @@ enum ChoiceType {
   Knowledge,
   FirstDomainAbility,
   SecondDomainAbility,
-  ThirdDomainAbility
+  ThirdDomainAbility,
+  Unchanged
 }

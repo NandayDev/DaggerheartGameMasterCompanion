@@ -30,7 +30,7 @@ abstract class EventObserver {
 }
 
 class BaseState {
-  bool isLoading;
+  final bool isLoading;
 
-  BaseState({required this.isLoading});
+  const BaseState({required this.isLoading});
 }

@@ -16,7 +16,7 @@ class LoadedAddCharacterDialogUiState extends BaseState {
   final ChoiceUiModel secondDomainAbilityUiModel;
   final ChoiceUiModel? thirdDomainAbilityUiModel;
 
-  LoadedAddCharacterDialogUiState({
+  const LoadedAddCharacterDialogUiState({
     required this.classUiModel,
     required this.subclassUiModel,
     required this.ancestryUiModel,
@@ -33,32 +33,40 @@ class LoadedAddCharacterDialogUiState extends BaseState {
   }) : super(isLoading: false);
 
   LoadedAddCharacterDialogUiState copy({
-    ChoiceUiModel? newClassUiModel,
-    ChoiceUiModel? newSubclassUiModel,
-    ChoiceUiModel? newAncestryUiModel,
-    ChoiceUiModel? newCommunityUiModel,
-    ChoiceUiModel? newAgilityUiModel,
-    ChoiceUiModel? newStrengthUiModel,
-    ChoiceUiModel? newFinesseUiModel,
-    ChoiceUiModel? newInstinctUiModel,
-    ChoiceUiModel? newPresenceUiModel,
-    ChoiceUiModel? newKnowledgeUiModel,
-    ChoiceUiModel? newFirstDomainAbilityUiModel,
-    ChoiceUiModel? newSecondDomainAbilityUiModel,
-    ChoiceUiModel? newThirdDomainAbilityUiModel,
+    ChoiceUiModel newClassUiModel = _unchanged,
+    ChoiceUiModel newSubclassUiModel = _unchanged,
+    ChoiceUiModel newAncestryUiModel = _unchanged,
+    ChoiceUiModel newCommunityUiModel = _unchanged,
+    ChoiceUiModel newAgilityUiModel = _unchanged,
+    ChoiceUiModel newStrengthUiModel = _unchanged,
+    ChoiceUiModel newFinesseUiModel = _unchanged,
+    ChoiceUiModel newInstinctUiModel = _unchanged,
+    ChoiceUiModel newPresenceUiModel = _unchanged,
+    ChoiceUiModel newKnowledgeUiModel = _unchanged,
+    ChoiceUiModel newFirstDomainAbilityUiModel = _unchanged,
+    ChoiceUiModel newSecondDomainAbilityUiModel = _unchanged,
+    ChoiceUiModel? newThirdDomainAbilityUiModel = _unchanged,
   }) => LoadedAddCharacterDialogUiState(
-    classUiModel: newClassUiModel ?? classUiModel,
-    subclassUiModel: newSubclassUiModel ?? subclassUiModel,
-    ancestryUiModel: newAncestryUiModel ?? ancestryUiModel,
-    communityUiModel: newCommunityUiModel ?? communityUiModel,
-    agilityUiModel: newAgilityUiModel ?? agilityUiModel,
-    strengthUiModel: newStrengthUiModel ?? strengthUiModel,
-    finesseUiModel: newFinesseUiModel ?? finesseUiModel,
-    instinctUiModel: newInstinctUiModel ?? instinctUiModel,
-    presenceUiModel: newPresenceUiModel ?? presenceUiModel,
-    knowledgeUiModel: newKnowledgeUiModel ?? knowledgeUiModel,
-    firstDomainAbilityUiModel: newFirstDomainAbilityUiModel ?? firstDomainAbilityUiModel,
-    secondDomainAbilityUiModel: newSecondDomainAbilityUiModel ?? secondDomainAbilityUiModel,
-    thirdDomainAbilityUiModel: newThirdDomainAbilityUiModel ?? thirdDomainAbilityUiModel,
+    classUiModel: newClassUiModel == _unchanged ? classUiModel : newClassUiModel,
+    subclassUiModel: newSubclassUiModel == _unchanged ? subclassUiModel : newSubclassUiModel,
+    ancestryUiModel: newAncestryUiModel == _unchanged ? ancestryUiModel : newAncestryUiModel,
+    communityUiModel: newCommunityUiModel == _unchanged ? communityUiModel : newCommunityUiModel,
+    agilityUiModel: newAgilityUiModel == _unchanged ? agilityUiModel : newAgilityUiModel,
+    strengthUiModel: newStrengthUiModel == _unchanged ? strengthUiModel : newStrengthUiModel,
+    finesseUiModel: newFinesseUiModel == _unchanged ? finesseUiModel : newFinesseUiModel,
+    instinctUiModel: newInstinctUiModel == _unchanged ? instinctUiModel : newInstinctUiModel,
+    presenceUiModel: newPresenceUiModel == _unchanged ? presenceUiModel : newPresenceUiModel,
+    knowledgeUiModel: newKnowledgeUiModel == _unchanged ? knowledgeUiModel : newKnowledgeUiModel,
+    firstDomainAbilityUiModel: newFirstDomainAbilityUiModel == _unchanged ? firstDomainAbilityUiModel : newFirstDomainAbilityUiModel,
+    secondDomainAbilityUiModel: newSecondDomainAbilityUiModel == _unchanged ? secondDomainAbilityUiModel : newSecondDomainAbilityUiModel,
+    thirdDomainAbilityUiModel: newThirdDomainAbilityUiModel == _unchanged ? thirdDomainAbilityUiModel : newThirdDomainAbilityUiModel,
+  );
+
+  static const ChoiceUiModel _unchanged = ChoiceUiModel(
+    type: ChoiceType.Unchanged,
+    isEnabled: false,
+    isError: true,
+    selectedChild: null,
+    children: [],
   );
 }
