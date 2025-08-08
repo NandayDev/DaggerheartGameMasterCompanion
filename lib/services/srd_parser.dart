@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:daggerheart_game_master_companion/extensions/list_extensions.dart';
 import 'package:daggerheart_game_master_companion/models/srd/ability.dart';
+import 'package:daggerheart_game_master_companion/models/srd/ancestry.dart';
+import 'package:daggerheart_game_master_companion/models/srd/community.dart';
 import 'package:daggerheart_game_master_companion/models/srd/daggerheart_class.dart';
 import 'package:daggerheart_game_master_companion/models/srd/daggerheart_subclass.dart';
 import 'package:daggerheart_game_master_companion/models/srd/domain.dart';
@@ -11,13 +13,18 @@ import 'package:flutter/services.dart';
 
 abstract class SrdParser {
   Future<Iterable<DaggerheartClass>> getAllClasses();
-  Future<DaggerheartClass?> getClass(String name);
 
-  Future<Domain?> getDomain(String name);
+  Future<DaggerheartClass?> getClass(String key);
 
-  Future<Ability?> getAbility(String name);
+  Future<Domain?> getDomain(String key);
 
-  Future<DaggerheartSubclass?> getSubclass(String name);
+  Future<Ability?> getAbility(String key);
+
+  Future<DaggerheartSubclass?> getSubclass(String key);
+
+  Future<Iterable<Ancestry>> getAllAncestries();
+
+  Future<Iterable<Community>> getAllCommunities();
 }
 
 class SrdParserImpl implements SrdParser {
@@ -25,6 +32,8 @@ class SrdParserImpl implements SrdParser {
   Map<String, Domain>? _domainsCache;
   Map<String, Ability>? _abilitiesCache;
   Map<String, DaggerheartSubclass>? _subclassesCache;
+  Map<String, Ancestry>? _ancestriesCache;
+  Map<String, Community>? _communitiesCache;
 
   @override
   Future<Iterable<DaggerheartClass>> getAllClasses() async {
@@ -33,13 +42,13 @@ class SrdParserImpl implements SrdParser {
   }
 
   @override
-  Future<DaggerheartClass?> getClass(String name) async {
+  Future<DaggerheartClass?> getClass(String key) async {
     await _fillClassesCache();
-    return _classesCache![name];
+    return _classesCache![key];
   }
 
   @override
-  Future<Domain?> getDomain(String name) async {
+  Future<Domain?> getDomain(String key) async {
     if (_domainsCache == null) {
       final map = <String, Domain>{};
       final domainsString = await rootBundle.loadString(_DOMAINS);
@@ -69,11 +78,11 @@ class SrdParserImpl implements SrdParser {
       }
       _domainsCache = map;
     }
-    return _domainsCache![name];
+    return _domainsCache![key];
   }
 
   @override
-  Future<Ability?> getAbility(String name) async {
+  Future<Ability?> getAbility(String key) async {
     if (_abilitiesCache == null) {
       final map = <String, Ability>{};
       final abilitiesString = await rootBundle.loadString(_ABILITIES);
@@ -94,11 +103,11 @@ class SrdParserImpl implements SrdParser {
       }
       _abilitiesCache = map;
     }
-    return _abilitiesCache![name];
+    return _abilitiesCache![key];
   }
 
   @override
-  Future<DaggerheartSubclass?> getSubclass(String name) async {
+  Future<DaggerheartSubclass?> getSubclass(String key) async {
     if (_subclassesCache == null) {
       final map = <String, DaggerheartSubclass>{};
       final subclassesString = await rootBundle.loadString(_SUBCLASSES);
@@ -119,7 +128,7 @@ class SrdParserImpl implements SrdParser {
       }
       _subclassesCache = map;
     }
-    return _subclassesCache![name];
+    return _subclassesCache![key];
   }
 
   Future<void> _fillClassesCache() async {
@@ -160,6 +169,47 @@ class SrdParserImpl implements SrdParser {
     }
   }
 
+  @override
+  Future<Iterable<Ancestry>> getAllAncestries() async {
+    if (_ancestriesCache == null) {
+      final map = <String, Ancestry>{};
+      final ancestriesString = await rootBundle.loadString(_ANCESTRIES);
+      final ancestriesJson = jsonDecode(ancestriesString) as Map<String, dynamic>;
+      for (final ancestryEntry in ancestriesJson.entries) {
+        final json = ancestryEntry.value;
+        map[ancestryEntry.key] = Ancestry(
+          key: ancestryEntry.key,
+          name: json["name"],
+          description: json["description"],
+          features: _parseFeatureList(json["features"]),
+        );
+        _ancestriesCache = map;
+      }
+    }
+    return _ancestriesCache!.values;
+  }
+
+  @override
+  Future<Iterable<Community>> getAllCommunities() async {
+    if (_communitiesCache == null) {
+      final map = <String, Community>{};
+      final communitiesString = await rootBundle.loadString(_COMMUNITIES);
+      final communitiesJson = jsonDecode(communitiesString) as Map<String, dynamic>;
+      for (final communityEntry in communitiesJson.entries) {
+        final json = communityEntry.value;
+        map[communityEntry.key] = Community(
+          key: communityEntry.key,
+          name: json["name"],
+          description: json["description"],
+          individualDescription: json["individualDescription"],
+          communityFeature: _parseFeature(json["communityFeature"]),
+        );
+        _communitiesCache = map;
+      }
+    }
+    return _communitiesCache!.values;
+  }
+
   static Feature _parseFeature(dynamic json) =>
       Feature(name: json["name"], description: json["description"], hopeCost: json["hopeCost"], stressCost: json["stressCost"]);
 
@@ -173,4 +223,6 @@ class SrdParserImpl implements SrdParser {
   static const String _DOMAINS = "$_FOLDER/domains.json";
   static const String _ABILITIES = "$_FOLDER/abilities.json";
   static const String _SUBCLASSES = "$_FOLDER/subclasses.json";
+  static const String _ANCESTRIES = "$_FOLDER/ancestries.json";
+  static const String _COMMUNITIES = "$_FOLDER/communities.json";
 }

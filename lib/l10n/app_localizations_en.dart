@@ -28,6 +28,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get combat => 'Combat';
 
   @override
+  String get daggerheartClass => 'Class';
+
+  @override
+  String get subclass => 'Subclass';
+
+  @override
+  String get ancestry => 'Ancestry';
+
+  @override
+  String get community => 'Community';
+
+  @override
+  String get agility => 'Agility';
+
+  @override
+  String get strength => 'Strength';
+
+  @override
+  String get finesse => 'Finesse';
+
+  @override
+  String get instinct => 'Instinct';
+
+  @override
+  String get presence => 'Presence';
+
+  @override
+  String get knowledge => 'Knowledge';
+
+  @override
   String get campaignSelectionAddCampaignHint => 'No campaigns saved. Why don\'t you start a new one?';
 
   @override
@@ -50,4 +80,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addCampaignDialogAddCharacter => 'Add character';
+
+  @override
+  String get addCharacterDialogTitle => 'Create new player character';
+
+  @override
+  String get addCharacterDialogSelectClass => 'Select a class';
+
+  @override
+  String get addCharacterDialogSelectSubclass => 'Select a subclass';
+
+  @override
+  String get addCharacterDialogSelectAncestry => 'Select an ancestry';
+
+  @override
+  String get addCharacterDialogSelectCommunity => 'Select a community';
+
+  @override
+  String get addCharacterDialogResetTraits => 'Reset traits';
+
+  @override
+  String get addCharacterDialogSaveError => 'Please fill all highlighted fields before saving';
 }

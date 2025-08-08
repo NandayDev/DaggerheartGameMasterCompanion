@@ -63,7 +63,7 @@ import 'app_localizations_it.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -72,7 +72,7 @@ abstract class AppLocalizations {
   }
 
   static const LocalizationsDelegate<AppLocalizations> delegate =
-  _AppLocalizationsDelegate();
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -85,12 +85,12 @@ abstract class AppLocalizations {
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-  <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -133,6 +133,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Combat'**
   String get combat;
+
+  /// No description provided for @daggerheartClass.
+  ///
+  /// In en, this message translates to:
+  /// **'Class'**
+  String get daggerheartClass;
+
+  /// No description provided for @subclass.
+  ///
+  /// In en, this message translates to:
+  /// **'Subclass'**
+  String get subclass;
+
+  /// No description provided for @ancestry.
+  ///
+  /// In en, this message translates to:
+  /// **'Ancestry'**
+  String get ancestry;
+
+  /// No description provided for @community.
+  ///
+  /// In en, this message translates to:
+  /// **'Community'**
+  String get community;
+
+  /// No description provided for @agility.
+  ///
+  /// In en, this message translates to:
+  /// **'Agility'**
+  String get agility;
+
+  /// No description provided for @strength.
+  ///
+  /// In en, this message translates to:
+  /// **'Strength'**
+  String get strength;
+
+  /// No description provided for @finesse.
+  ///
+  /// In en, this message translates to:
+  /// **'Finesse'**
+  String get finesse;
+
+  /// No description provided for @instinct.
+  ///
+  /// In en, this message translates to:
+  /// **'Instinct'**
+  String get instinct;
+
+  /// No description provided for @presence.
+  ///
+  /// In en, this message translates to:
+  /// **'Presence'**
+  String get presence;
+
+  /// No description provided for @knowledge.
+  ///
+  /// In en, this message translates to:
+  /// **'Knowledge'**
+  String get knowledge;
 
   /// No description provided for @campaignSelectionAddCampaignHint.
   ///
@@ -181,9 +241,52 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add character'**
   String get addCampaignDialogAddCharacter;
+
+  /// No description provided for @addCharacterDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new player character'**
+  String get addCharacterDialogTitle;
+
+  /// No description provided for @addCharacterDialogSelectClass.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a class'**
+  String get addCharacterDialogSelectClass;
+
+  /// No description provided for @addCharacterDialogSelectSubclass.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a subclass'**
+  String get addCharacterDialogSelectSubclass;
+
+  /// No description provided for @addCharacterDialogSelectAncestry.
+  ///
+  /// In en, this message translates to:
+  /// **'Select an ancestry'**
+  String get addCharacterDialogSelectAncestry;
+
+  /// No description provided for @addCharacterDialogSelectCommunity.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a community'**
+  String get addCharacterDialogSelectCommunity;
+
+  /// No description provided for @addCharacterDialogResetTraits.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset traits'**
+  String get addCharacterDialogResetTraits;
+
+  /// No description provided for @addCharacterDialogSaveError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill all highlighted fields before saving'**
+  String get addCharacterDialogSaveError;
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override

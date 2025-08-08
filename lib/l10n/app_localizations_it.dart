@@ -28,6 +28,36 @@ class AppLocalizationsIt extends AppLocalizations {
   String get combat => 'Combattimento';
 
   @override
+  String get daggerheartClass => 'Classe';
+
+  @override
+  String get subclass => 'Sottoclasse';
+
+  @override
+  String get ancestry => 'Specie';
+
+  @override
+  String get community => 'Comunità';
+
+  @override
+  String get agility => 'Agilità';
+
+  @override
+  String get strength => 'Forza';
+
+  @override
+  String get finesse => 'Finezza';
+
+  @override
+  String get instinct => 'Istinto';
+
+  @override
+  String get presence => 'Presenza';
+
+  @override
+  String get knowledge => 'Conoscenza';
+
+  @override
   String get campaignSelectionAddCampaignHint => 'Crea una nuova campagna per iniziare!';
 
   @override
@@ -50,4 +80,25 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get addCampaignDialogAddCharacter => 'Aggiungi personaggio';
+
+  @override
+  String get addCharacterDialogTitle => 'Crea nuovo personaggio';
+
+  @override
+  String get addCharacterDialogSelectClass => 'Seleziona una classe';
+
+  @override
+  String get addCharacterDialogSelectSubclass => 'Seleziona una sottoclasse';
+
+  @override
+  String get addCharacterDialogSelectAncestry => 'Seleziona una specie';
+
+  @override
+  String get addCharacterDialogSelectCommunity => 'Seleziona una comunità';
+
+  @override
+  String get addCharacterDialogResetTraits => 'Resetta valori';
+
+  @override
+  String get addCharacterDialogSaveError => 'Compila correttamente tutti i campi evidenziati prima di salvare';
 }

@@ -5,6 +5,17 @@
   "save": "Salva",
   "campaignSelection": "Selezione campagna",
   "combat": "Combattimento",
+  "daggerheartClass": "Classe",
+  "subclass": "Sottoclasse",
+  "ancestry": "Specie",
+  "community": "Comunità",
+  "agility": "Agilità",
+  "strength": "Forza",
+  "finesse": "Finezza",
+  "instinct": "Istinto",
+  "presence": "Presenza",
+  "knowledge": "Conoscenza",
+
   "campaignSelectionAddCampaignHint": "Crea una nuova campagna per iniziare!",
   "campaignSelectionAddCampaign": "Crea una nuova campagna",
   "campaignSelectionError": "Errore nel caricamento della campagna. I dati potrebbero essere stati alterati.",
@@ -13,5 +24,11 @@
   "addCampaignDialogCharacters": "Personaggi",
   "addCampaignDialogNoCharacterAdded": "Nessun personaggio aggiunto",
   "addCampaignDialogAddCharacter": "Aggiungi personaggio",
-  "addCharacterDialogTitle": "Crea nuovo personaggio"
+  "addCharacterDialogTitle": "Crea nuovo personaggio",
+  "addCharacterDialogSelectClass": "Seleziona una classe",
+  "addCharacterDialogSelectSubclass": "Seleziona una sottoclasse",
+  "addCharacterDialogSelectAncestry": "Seleziona una specie",
+  "addCharacterDialogSelectCommunity": "Seleziona una comunità",
+  "addCharacterDialogResetTraits": "Resetta valori",
+  "addCharacterDialogSaveError": "Compila correttamente tutti i campi evidenziati prima di salvare"
 }

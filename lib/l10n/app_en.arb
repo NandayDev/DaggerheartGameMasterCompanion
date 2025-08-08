@@ -5,6 +5,17 @@
   "save": "Save",
   "campaignSelection": "Campaign selection",
   "combat": "Combat",
+  "daggerheartClass": "Class",
+  "subclass": "Subclass",
+  "ancestry": "Ancestry",
+  "community": "Community",
+  "agility": "Agility",
+  "strength": "Strength",
+  "finesse": "Finesse",
+  "instinct": "Instinct",
+  "presence": "Presence",
+  "knowledge": "Knowledge",
+
   "campaignSelectionAddCampaignHint": "No campaigns saved. Why don't you start a new one?",
   "campaignSelectionAddCampaign": "Create new campaign",
   "campaignSelectionError": "Error while loading this campaign. Data may have been altered.",
@@ -13,5 +24,11 @@
   "addCampaignDialogCharacters": "Player characters",
   "addCampaignDialogNoCharacterAdded": "No character added",
   "addCampaignDialogAddCharacter": "Add character",
-  "addCharacterDialogTitle": "Create new player character"
+  "addCharacterDialogTitle": "Create new player character",
+  "addCharacterDialogSelectClass": "Select a class",
+  "addCharacterDialogSelectSubclass": "Select a subclass",
+  "addCharacterDialogSelectAncestry": "Select an ancestry",
+  "addCharacterDialogSelectCommunity": "Select a community",
+  "addCharacterDialogResetTraits": "Reset traits",
+  "addCharacterDialogSaveError": "Please fill all highlighted fields before saving"
 }

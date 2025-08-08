@@ -5,6 +5,8 @@ import 'package:daggerheart_game_master_companion/services/data/campaign_reposit
 import 'package:daggerheart_game_master_companion/services/data/data_source.dart';
 import 'package:daggerheart_game_master_companion/services/data/player_characters_repository.dart';
 import 'package:daggerheart_game_master_companion/services/srd_parser.dart';
+import 'package:daggerheart_game_master_companion/ui/campaign_selection/add_campaign_dialog/add_campaign_dialog_view_model.dart';
+import 'package:daggerheart_game_master_companion/ui/campaign_selection/add_campaign_dialog/add_character_dialog/add_character_dialog_view_model.dart';
 import 'package:daggerheart_game_master_companion/ui/campaign_selection/campaign_selection_view_model.dart';
 import 'package:daggerheart_game_master_companion/ui/home_page.dart';
 import 'package:flutter/material.dart';
@@ -42,5 +44,7 @@ void _registerDependencyInjections() {
       )
       .registerSingleton<LocalDataSource>(() => LocalJsonDataSource())
       .registerSingleton<SrdParser>(() => SrdParserImpl())
-      .registerFactory<CampaignSelectionViewModel>(() => CampaignSelectionViewModel(DependencyInjector.resolve()));
+      .registerFactory<CampaignSelectionViewModel>(() => CampaignSelectionViewModel(DependencyInjector.resolve()))
+      .registerFactory<AddCampaignDialogViewModel>(() => AddCampaignDialogViewModel())
+      .registerFactory<AddCharacterDialogViewModel>(() => AddCharacterDialogViewModel(DependencyInjector.resolve(), DependencyInjector.resolve()));
 }

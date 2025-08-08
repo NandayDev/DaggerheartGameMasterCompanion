@@ -4,6 +4,7 @@ import 'package:daggerheart_game_master_companion/ui/campaign_selection/add_camp
 import 'package:daggerheart_game_master_companion/ui/campaign_selection/campaign_selection_ui_model.dart';
 import 'package:daggerheart_game_master_companion/ui/campaign_selection/campaign_selection_ui_state.dart';
 import 'package:daggerheart_game_master_companion/ui/campaign_selection/campaign_selection_view_model.dart';
+import 'package:daggerheart_game_master_companion/ui/shared/button.dart';
 import 'package:flutter/material.dart';
 
 class CampaignSelectionPage extends StatefulWidget {
@@ -37,16 +38,14 @@ class _CampaignSelectionPageState extends DaggerheartState<CampaignSelectionPage
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(localizations.campaignSelectionAddCampaignHint, style: theme.textTheme.bodyLarge,),
+            Text(localizations.campaignSelectionAddCampaignHint, style: theme.textTheme.bodyLarge),
             SizedBox(height: 15.0),
-            MaterialButton(
-              color: theme.primaryColorLight,
-              // textColor: Theme.of(context).primaryColorLight,
+            DaggerheartButton(
+              text: localizations.campaignSelectionAddCampaign,
               onPressed: () async {
-                await showCreateCampaignDialog(context);
+                await showDialog(context: context, builder: (context) => const AddCampaignDialog());
                 viewModel.initialize();
               },
-              child: Text(localizations.campaignSelectionAddCampaign),
             ),
           ],
         ),
