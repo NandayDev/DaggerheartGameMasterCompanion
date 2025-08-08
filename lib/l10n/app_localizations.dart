@@ -134,6 +134,18 @@ abstract class AppLocalizations {
   /// **'Combat'**
   String get combat;
 
+  /// No description provided for @domain.
+  ///
+  /// In en, this message translates to:
+  /// **'Domain'**
+  String get domain;
+
+  /// No description provided for @domainAbility.
+  ///
+  /// In en, this message translates to:
+  /// **'Domain ability'**
+  String get domainAbility;
+
   /// No description provided for @daggerheartClass.
   ///
   /// In en, this message translates to:
@@ -248,6 +260,12 @@ abstract class AppLocalizations {
   /// **'Create new player character'**
   String get addCharacterDialogTitle;
 
+  /// No description provided for @addCharacterDialogCharacterName.
+  ///
+  /// In en, this message translates to:
+  /// **'Character\'s name'**
+  String get addCharacterDialogCharacterName;
+
   /// No description provided for @addCharacterDialogSelectClass.
   ///
   /// In en, this message translates to:
@@ -271,6 +289,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select a community'**
   String get addCharacterDialogSelectCommunity;
+
+  /// No description provided for @addCharacterDialogSelectDomain.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a domain ability'**
+  String get addCharacterDialogSelectDomain;
 
   /// No description provided for @addCharacterDialogResetTraits.
   ///

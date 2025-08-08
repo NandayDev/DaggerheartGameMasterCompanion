@@ -5,6 +5,8 @@
   "save": "Salva",
   "campaignSelection": "Selezione campagna",
   "combat": "Combattimento",
+  "domain": "Dominio",
+  "domainAbility": "Abilità del dominio",
   "daggerheartClass": "Classe",
   "subclass": "Sottoclasse",
   "ancestry": "Specie",
@@ -25,10 +27,12 @@
   "addCampaignDialogNoCharacterAdded": "Nessun personaggio aggiunto",
   "addCampaignDialogAddCharacter": "Aggiungi personaggio",
   "addCharacterDialogTitle": "Crea nuovo personaggio",
+  "addCharacterDialogCharacterName": "Nome del personaggio",
   "addCharacterDialogSelectClass": "Seleziona una classe",
   "addCharacterDialogSelectSubclass": "Seleziona una sottoclasse",
   "addCharacterDialogSelectAncestry": "Seleziona una specie",
   "addCharacterDialogSelectCommunity": "Seleziona una comunità",
+  "addCharacterDialogSelectDomain": "Seleziona abilità di dominio",
   "addCharacterDialogResetTraits": "Resetta valori",
   "addCharacterDialogSaveError": "Compila correttamente tutti i campi evidenziati prima di salvare"
 }

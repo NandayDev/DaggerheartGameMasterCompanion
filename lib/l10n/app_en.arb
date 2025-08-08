@@ -5,6 +5,8 @@
   "save": "Save",
   "campaignSelection": "Campaign selection",
   "combat": "Combat",
+  "domain": "Domain",
+  "domainAbility": "Domain ability",
   "daggerheartClass": "Class",
   "subclass": "Subclass",
   "ancestry": "Ancestry",
@@ -25,10 +27,12 @@
   "addCampaignDialogNoCharacterAdded": "No character added",
   "addCampaignDialogAddCharacter": "Add character",
   "addCharacterDialogTitle": "Create new player character",
+  "addCharacterDialogCharacterName": "Character's name",
   "addCharacterDialogSelectClass": "Select a class",
   "addCharacterDialogSelectSubclass": "Select a subclass",
   "addCharacterDialogSelectAncestry": "Select an ancestry",
   "addCharacterDialogSelectCommunity": "Select a community",
+  "addCharacterDialogSelectDomain": "Select a domain ability",
   "addCharacterDialogResetTraits": "Reset traits",
   "addCharacterDialogSaveError": "Please fill all highlighted fields before saving"
 }

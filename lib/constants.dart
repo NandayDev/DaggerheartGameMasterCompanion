@@ -7,3 +7,5 @@ const CLASS_SERAPH_KEY = "seraph";
 const CLASS_SORCERER_KEY = "sorcerer";
 const CLASS_WARRIOR_KEY = "warrior";
 const CLASS_WIZARD_KEY = "wizard";
+
+const SUBCLASS_SCHOOL_OF_KNOWLEDGE = "school of knowledge";

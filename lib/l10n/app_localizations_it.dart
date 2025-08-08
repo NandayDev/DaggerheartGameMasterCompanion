@@ -28,6 +28,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get combat => 'Combattimento';
 
   @override
+  String get domain => 'Dominio';
+
+  @override
+  String get domainAbility => 'Abilità del dominio';
+
+  @override
   String get daggerheartClass => 'Classe';
 
   @override
@@ -85,6 +91,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get addCharacterDialogTitle => 'Crea nuovo personaggio';
 
   @override
+  String get addCharacterDialogCharacterName => 'Nome del personaggio';
+
+  @override
   String get addCharacterDialogSelectClass => 'Seleziona una classe';
 
   @override
@@ -95,6 +104,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get addCharacterDialogSelectCommunity => 'Seleziona una comunità';
+
+  @override
+  String get addCharacterDialogSelectDomain => 'Seleziona abilità di dominio';
 
   @override
   String get addCharacterDialogResetTraits => 'Resetta valori';

@@ -15,104 +15,133 @@ class AddCharacterDialog extends StatefulWidget {
 }
 
 class _AddCharacterDialogState extends DaggerheartState<AddCharacterDialog, AddCharacterDialogViewModel> {
+  late TextEditingController nameTextController;
+
   @override
   void initState() {
     viewModel.initialize();
+    nameTextController = TextEditingController(text: viewModel.name);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-
+    final theme = Theme.of(context);
     if (state.isLoading) {
       return Center(child: CircularProgressIndicator());
     }
     final uiState = state as LoadedAddCharacterDialogUiState;
     return AlertDialog(
       title: Text(localizations.addCharacterDialogTitle),
-      content: SizedBox(
-        width: 1000,
-        child: Column(
-          spacing: 15.0,
-          children: [
-            Row(
-              spacing: 100.0,
-              children: [
-                _createDropdown(
-                    uiState.classUiModel, 450, localizations.daggerheartClass, localizations.addCharacterDialogSelectClass, (selectedChild,) {
-                  viewModel.classChanged(selectedChild);
-                }),
-                _createDropdown(
-                    uiState.subclassUiModel, 450, localizations.subclass, localizations.addCharacterDialogSelectSubclass, (selectedChild,) {
-                  viewModel.subclassChanged(selectedChild);
-                }),
-              ],
-            ),
-            Row(
-              spacing: 100.0,
-              children: [
-                _createDropdown(
-                    uiState.ancestryUiModel, 450, localizations.ancestry, localizations.addCharacterDialogSelectAncestry, (selectedChild,) {
-                  viewModel.ancestryChanged(selectedChild);
-                }),
-                _createDropdown(
-                    uiState.communityUiModel, 450, localizations.community, localizations.addCharacterDialogSelectCommunity, (selectedChild,) {
-                  viewModel.communityChanged(selectedChild);
-                }),
-              ],
-            ),
-            Row(
-              spacing: 20.0,
-
-              children: [
-                _createDropdown(uiState.agilityUiModel, 130, localizations.agility, "", (selectedChild) {
-                  viewModel.traitChanged(ChoiceType.Agility, selectedChild);
-                }),
-                _createDropdown(uiState.strengthUiModel, 130, localizations.strength, "", (selectedChild) {
-                  viewModel.traitChanged(ChoiceType.Strength, selectedChild);
-                }),
-                _createDropdown(uiState.finesseUiModel, 130, localizations.finesse, "", (selectedChild) {
-                  viewModel.traitChanged(ChoiceType.Finesse, selectedChild);
-                }),
-                _createDropdown(uiState.instinctUiModel, 130, localizations.instinct, "", (selectedChild) {
-                  viewModel.traitChanged(ChoiceType.Instinct, selectedChild);
-                }),
-                _createDropdown(uiState.presenceUiModel, 130, localizations.presence, "", (selectedChild) {
-                  viewModel.traitChanged(ChoiceType.Presence, selectedChild);
-                }),
-                _createDropdown(uiState.knowledgeUiModel, 130, localizations.knowledge, "", (selectedChild) {
-                  viewModel.traitChanged(ChoiceType.Knowledge, selectedChild);
-                }),
-                Column(
-                  children: [
-                    SizedBox(height: 20,),
-                    SizedBox(
-                      width: 100,
-                      child: DaggerheartButton(
-                        text: localizations.addCharacterDialogResetTraits,
-                        onPressed: () {
-                          viewModel.resetTraits();
-                        },
-                      ),
+      content: SingleChildScrollView(
+        child: SizedBox(
+          width: 1000,
+          child: Column(
+            spacing: 15.0,
+            children: [
+              Column(
+                spacing: 5.0,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 10.0),
+                    child: Text(localizations.addCharacterDialogCharacterName, style: theme.textTheme.labelSmall),
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                      //labelText: 'Etichetta',
+                      //hintText: 'Seleziona o scrivi',
+                      border: OutlineInputBorder(), // bordo outline
+                      enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue, width: 2)),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                     ),
-                  ],
-                ),
-              ],
-            ),
-
-            DaggerheartButton(
-              text: localizations.save,
-              onPressed: () {
-                final playerCharacter = viewModel.buildPlayerCharacter();
-                if (playerCharacter != null) {
-                  Navigator.of(context).pop(playerCharacter);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(localizations.addCharacterDialogSaveError)));
-                }
-              },
-            ),
-          ],
+                    textAlign: TextAlign.center,
+                    controller: nameTextController,
+                    onChanged: (newText) {
+                      viewModel.nameChanged(newText);
+                    },
+                  ),
+                ],
+              ),
+              Row(
+                spacing: 100.0,
+                children: [
+                  _createDropdown(
+                      uiState.classUiModel, 450, localizations.daggerheartClass, localizations.addCharacterDialogSelectClass, (selectedChild,) {
+                    viewModel.classChanged(selectedChild);
+                  }),
+                  _createDropdown(
+                      uiState.subclassUiModel, 450, localizations.subclass, localizations.addCharacterDialogSelectSubclass, (selectedChild,) {
+                    viewModel.subclassChanged(selectedChild);
+                  }),
+                ],
+              ),
+              Row(
+                spacing: 100.0,
+                children: [
+                  _createDropdown(
+                      uiState.ancestryUiModel, 450, localizations.ancestry, localizations.addCharacterDialogSelectAncestry, (selectedChild,) {
+                    viewModel.ancestryChanged(selectedChild);
+                  }),
+                  _createDropdown(
+                      uiState.communityUiModel, 450, localizations.community, localizations.addCharacterDialogSelectCommunity, (selectedChild,) {
+                    viewModel.communityChanged(selectedChild);
+                  }),
+                ],
+              ),
+              Row(
+                spacing: 20.0,
+                children: [
+                  _createDropdown(uiState.agilityUiModel, 130, localizations.agility, "", (selectedChild) {
+                    viewModel.traitChanged(ChoiceType.Agility, selectedChild);
+                  }),
+                  _createDropdown(uiState.strengthUiModel, 130, localizations.strength, "", (selectedChild) {
+                    viewModel.traitChanged(ChoiceType.Strength, selectedChild);
+                  }),
+                  _createDropdown(uiState.finesseUiModel, 130, localizations.finesse, "", (selectedChild) {
+                    viewModel.traitChanged(ChoiceType.Finesse, selectedChild);
+                  }),
+                  _createDropdown(uiState.instinctUiModel, 130, localizations.instinct, "", (selectedChild) {
+                    viewModel.traitChanged(ChoiceType.Instinct, selectedChild);
+                  }),
+                  _createDropdown(uiState.presenceUiModel, 130, localizations.presence, "", (selectedChild) {
+                    viewModel.traitChanged(ChoiceType.Presence, selectedChild);
+                  }),
+                  _createDropdown(uiState.knowledgeUiModel, 130, localizations.knowledge, "", (selectedChild) {
+                    viewModel.traitChanged(ChoiceType.Knowledge, selectedChild);
+                  }),
+                  Column(
+                    children: [
+                      SizedBox(height: 20),
+                      SizedBox(
+                        width: 100,
+                        child: DaggerheartButton(
+                          text: localizations.addCharacterDialogResetTraits,
+                          onPressed: () {
+                            viewModel.resetTraits();
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Row(spacing: 20.0, children: _createDomainAbilitiesDropdowns(uiState)),
+              DaggerheartButton(
+                text: localizations.save,
+                onPressed: () {
+                  final playerCharacter = viewModel.buildPlayerCharacter();
+                  if (playerCharacter != null) {
+                    Navigator.of(context).pop(playerCharacter);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(localizations.addCharacterDialogSaveError)));
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -145,5 +174,35 @@ class _AddCharacterDialogState extends DaggerheartState<AddCharacterDialog, AddC
         ),
       ],
     );
+  }
+
+  List<Widget> _createDomainAbilitiesDropdowns(LoadedAddCharacterDialogUiState uiState) {
+    final localizations = AppLocalizations.of(context)!;
+    final List<Widget> widgets = [];
+    double width;
+    if (uiState.thirdDomainAbilityUiModel == null) {
+      width = 450;
+    } else {
+      width = 266.67;
+    }
+    final firstDomainDropdown = _createDropdown(
+        uiState.firstDomainAbilityUiModel, width, localizations.domainAbility, localizations.addCharacterDialogSelectDomain, (selectedChild) {
+      viewModel.domainAbilityChanged(ChoiceType.FirstDomainAbility, selectedChild);
+    });
+    final secondDomainDropdown = _createDropdown(
+        uiState.secondDomainAbilityUiModel, width, localizations.domainAbility, localizations.addCharacterDialogSelectDomain, (selectedChild) {
+      viewModel.domainAbilityChanged(ChoiceType.SecondDomainAbility, selectedChild);
+    });
+    widgets.add(firstDomainDropdown);
+    widgets.add(secondDomainDropdown);
+    final thirdDomainAbilityUiModel = uiState.thirdDomainAbilityUiModel;
+    if (thirdDomainAbilityUiModel != null) {
+      final thirdDomainDropdown = _createDropdown(
+          thirdDomainAbilityUiModel, width, localizations.domainAbility, localizations.addCharacterDialogSelectDomain, (selectedChild) {
+        viewModel.domainAbilityChanged(ChoiceType.ThirdDomainAbility, selectedChild);
+      });
+      widgets.add(thirdDomainDropdown);
+    }
+    return widgets;
   }
 }

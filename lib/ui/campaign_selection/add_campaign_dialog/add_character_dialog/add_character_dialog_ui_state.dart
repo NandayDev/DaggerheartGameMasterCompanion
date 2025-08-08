@@ -12,6 +12,9 @@ class LoadedAddCharacterDialogUiState extends BaseState {
   final ChoiceUiModel instinctUiModel;
   final ChoiceUiModel presenceUiModel;
   final ChoiceUiModel knowledgeUiModel;
+  final ChoiceUiModel firstDomainAbilityUiModel;
+  final ChoiceUiModel secondDomainAbilityUiModel;
+  final ChoiceUiModel? thirdDomainAbilityUiModel;
 
   LoadedAddCharacterDialogUiState({
     required this.classUiModel,
@@ -24,6 +27,9 @@ class LoadedAddCharacterDialogUiState extends BaseState {
     required this.instinctUiModel,
     required this.presenceUiModel,
     required this.knowledgeUiModel,
+    required this.firstDomainAbilityUiModel,
+    required this.secondDomainAbilityUiModel,
+    required this.thirdDomainAbilityUiModel,
   }) : super(isLoading: false);
 
   LoadedAddCharacterDialogUiState copy({
@@ -37,6 +43,9 @@ class LoadedAddCharacterDialogUiState extends BaseState {
     ChoiceUiModel? newInstinctUiModel,
     ChoiceUiModel? newPresenceUiModel,
     ChoiceUiModel? newKnowledgeUiModel,
+    ChoiceUiModel? newFirstDomainAbilityUiModel,
+    ChoiceUiModel? newSecondDomainAbilityUiModel,
+    ChoiceUiModel? newThirdDomainAbilityUiModel,
   }) => LoadedAddCharacterDialogUiState(
     classUiModel: newClassUiModel ?? classUiModel,
     subclassUiModel: newSubclassUiModel ?? subclassUiModel,
@@ -48,5 +57,8 @@ class LoadedAddCharacterDialogUiState extends BaseState {
     instinctUiModel: newInstinctUiModel ?? instinctUiModel,
     presenceUiModel: newPresenceUiModel ?? presenceUiModel,
     knowledgeUiModel: newKnowledgeUiModel ?? knowledgeUiModel,
+    firstDomainAbilityUiModel: newFirstDomainAbilityUiModel ?? firstDomainAbilityUiModel,
+    secondDomainAbilityUiModel: newSecondDomainAbilityUiModel ?? secondDomainAbilityUiModel,
+    thirdDomainAbilityUiModel: newThirdDomainAbilityUiModel ?? thirdDomainAbilityUiModel,
   );
 }

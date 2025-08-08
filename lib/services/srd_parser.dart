@@ -16,6 +16,8 @@ abstract class SrdParser {
 
   Future<DaggerheartClass?> getClass(String key);
 
+  Future<Iterable<Domain>> getAllDomains();
+
   Future<Domain?> getDomain(String key);
 
   Future<Ability?> getAbility(String key);
@@ -48,36 +50,14 @@ class SrdParserImpl implements SrdParser {
   }
 
   @override
+  Future<Iterable<Domain>> getAllDomains() async {
+    await _fillDomainsCache();
+    return _domainsCache!.values;
+  }
+
+  @override
   Future<Domain?> getDomain(String key) async {
-    if (_domainsCache == null) {
-      final map = <String, Domain>{};
-      final domainsString = await rootBundle.loadString(_DOMAINS);
-      final domainsJson = jsonDecode(domainsString) as Map<String, dynamic>;
-      for (final domainEntry in domainsJson.entries) {
-        final json = domainEntry.value;
-        final String domainName = json["name"];
-        final abilitiesByLevelJson = json["abilitiesByLevel"] as Map<String, dynamic>;
-        final abilitiesByLevel = <int, List<Ability>>{};
-        for (final entry in abilitiesByLevelJson.entries) {
-          final abilities = List<Ability>.empty(growable: true);
-          final abilityJson = abilitiesByLevelJson[entry.key] as Map<String, dynamic>;
-          final int level = abilityJson["level"];
-          for (final abilityName in abilityJson["abilities"]) {
-            final ability = await getAbility(abilityName);
-            abilities.add(ability!);
-          }
-          abilitiesByLevel[level] = abilities;
-        }
-        final domain = Domain(key: json["key"], name: domainName, description: json["description"], abilitiesByLevel: abilitiesByLevel);
-        for (final abilityList in abilitiesByLevel.values) {
-          for (final ability in abilityList) {
-            ability.domain = domain;
-          }
-        }
-        map[domainEntry.key] = domain;
-      }
-      _domainsCache = map;
-    }
+    await _fillDomainsCache();
     return _domainsCache![key];
   }
 
@@ -131,44 +111,6 @@ class SrdParserImpl implements SrdParser {
     return _subclassesCache![key];
   }
 
-  Future<void> _fillClassesCache() async {
-    if (_classesCache == null) {
-      final map = <String, DaggerheartClass>{};
-      final classesString = await rootBundle.loadString(_CLASSES);
-      final classesJson = jsonDecode(classesString) as Map<String, dynamic>;
-      for (final classEntry in classesJson.entries) {
-        final json = classEntry.value;
-        final String className = json["name"];
-        final List<Domain> domains = [];
-        for (final domainName in json["domains"]) {
-          final domain = await getDomain(domainName);
-          domains.add(domain!);
-        }
-        final List<DaggerheartSubclass> subclasses = [];
-        for (final subclassName in json["subclasses"]) {
-          final subclass = await getSubclass(subclassName);
-          subclasses.add(subclass!);
-        }
-        final daggerheartClass = DaggerheartClass(
-          key: json["key"],
-          name: className,
-          description: json["description"],
-          domains: domains,
-          startingEvasion: json["startingEvasion"],
-          startingHitPoints: json["startingHitPoints"],
-          classItems: json["classItems"],
-          hopeFeature: _parseFeature(json["hopeFeature"]),
-          classFeatures: _parseFeatureList(json["classFeatures"]),
-          subclasses: subclasses,
-          backgroundQuestions: json["backgroundQuestions"].cast<String>().toList(),
-          connections: json["connections"].cast<String>().toList(),
-        );
-        map[classEntry.key] = daggerheartClass;
-      }
-      _classesCache = map;
-    }
-  }
-
   @override
   Future<Iterable<Ancestry>> getAllAncestries() async {
     if (_ancestriesCache == null) {
@@ -208,6 +150,76 @@ class SrdParserImpl implements SrdParser {
       }
     }
     return _communitiesCache!.values;
+  }
+
+  Future<void> _fillClassesCache() async {
+    if (_classesCache == null) {
+      final map = <String, DaggerheartClass>{};
+      final classesString = await rootBundle.loadString(_CLASSES);
+      final classesJson = jsonDecode(classesString) as Map<String, dynamic>;
+      for (final classEntry in classesJson.entries) {
+        final json = classEntry.value;
+        final String className = json["name"];
+        final List<Domain> domains = [];
+        for (final domainName in json["domains"]) {
+          final domain = await getDomain(domainName);
+          domains.add(domain!);
+        }
+        final List<DaggerheartSubclass> subclasses = [];
+        for (final subclassName in json["subclasses"]) {
+          final subclass = await getSubclass(subclassName);
+          subclasses.add(subclass!);
+        }
+        final daggerheartClass = DaggerheartClass(
+          key: json["key"],
+          name: className,
+          description: json["description"],
+          domains: domains,
+          startingEvasion: json["startingEvasion"],
+          startingHitPoints: json["startingHitPoints"],
+          classItems: json["classItems"],
+          hopeFeature: _parseFeature(json["hopeFeature"]),
+          classFeatures: _parseFeatureList(json["classFeatures"]),
+          subclasses: subclasses,
+          backgroundQuestions: json["backgroundQuestions"].cast<String>().toList(),
+          connections: json["connections"].cast<String>().toList(),
+        );
+        map[classEntry.key] = daggerheartClass;
+      }
+      _classesCache = map;
+    }
+  }
+
+  Future<void> _fillDomainsCache() async {
+    if (_domainsCache == null) {
+      final map = <String, Domain>{};
+      final domainsString = await rootBundle.loadString(_DOMAINS);
+      final domainsJson = jsonDecode(domainsString) as Map<String, dynamic>;
+      for (final domainEntry in domainsJson.entries) {
+        final json = domainEntry.value;
+        final String domainName = json["name"];
+        final abilitiesByLevelJson = json["abilitiesByLevel"] as Map<String, dynamic>;
+        final abilitiesByLevel = <int, List<Ability>>{};
+        for (final entry in abilitiesByLevelJson.entries) {
+          final abilities = List<Ability>.empty(growable: true);
+          final abilityJson = abilitiesByLevelJson[entry.key] as Map<String, dynamic>;
+          final int level = abilityJson["level"];
+          for (final abilityName in abilityJson["abilities"]) {
+            final ability = await getAbility(abilityName);
+            abilities.add(ability!);
+          }
+          abilitiesByLevel[level] = abilities;
+        }
+        final domain = Domain(key: json["key"], name: domainName, description: json["description"], abilitiesByLevel: abilitiesByLevel);
+        for (final abilityList in abilitiesByLevel.values) {
+          for (final ability in abilityList) {
+            ability.domain = domain;
+          }
+        }
+        map[domainEntry.key] = domain;
+      }
+      _domainsCache = map;
+    }
   }
 
   static Feature _parseFeature(dynamic json) =>

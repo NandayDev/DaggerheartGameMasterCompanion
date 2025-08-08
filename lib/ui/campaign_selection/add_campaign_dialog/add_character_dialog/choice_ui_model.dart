@@ -22,4 +22,18 @@ class ChoiceChildUiModel {
   ChoiceChildUiModel({required this.key, required this.name});
 }
 
-enum ChoiceType { Class, Subclass, Ancestry, Community, Agility, Strength, Finesse, Instinct, Presence, Knowledge }
+enum ChoiceType {
+  Class,
+  Subclass,
+  Ancestry,
+  Community,
+  Agility,
+  Strength,
+  Finesse,
+  Instinct,
+  Presence,
+  Knowledge,
+  FirstDomainAbility,
+  SecondDomainAbility,
+  ThirdDomainAbility
+}
