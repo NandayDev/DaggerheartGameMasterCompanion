@@ -1,14 +1,15 @@
+import 'package:daggerheart_game_master_companion/models/srd/ability.dart';
 import 'package:daggerheart_game_master_companion/models/srd/daggerheart_class.dart';
 import 'package:daggerheart_game_master_companion/models/srd/daggerheart_subclass.dart';
-import 'package:daggerheart_game_master_companion/models/srd/domain.dart';
 
 class PlayerCharacter {
   final String key;
   final String name;
   final DaggerheartClass daggerheartClass;
   final int level;
-  final Domain domain;
+  final List<Ability> domainAbilities;
   final DaggerheartSubclass subclass;
+  final List<String> backgroundAnswers;
   final List<String> notes;
 
   PlayerCharacter({
@@ -16,8 +17,9 @@ class PlayerCharacter {
     required this.name,
     required this.daggerheartClass,
     required this.level,
-    required this.domain,
+    required this.domainAbilities,
     required this.subclass,
+    required this.backgroundAnswers,
     required this.notes,
   });
 }

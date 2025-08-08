@@ -2,6 +2,8 @@ import 'package:daggerheart_game_master_companion/ui/base/view_model.dart';
 import 'package:daggerheart_game_master_companion/ui/campaign_selection/add_campaign_dialog/add_character_dialog/choice_ui_model.dart';
 
 class LoadedAddCharacterDialogUiState extends BaseState {
+  final String name;
+  final bool isNameError;
   final ChoiceUiModel classUiModel;
   final ChoiceUiModel subclassUiModel;
   final ChoiceUiModel ancestryUiModel;
@@ -17,6 +19,8 @@ class LoadedAddCharacterDialogUiState extends BaseState {
   final ChoiceUiModel? thirdDomainAbilityUiModel;
 
   const LoadedAddCharacterDialogUiState({
+    required this.name,
+    required this.isNameError,
     required this.classUiModel,
     required this.subclassUiModel,
     required this.ancestryUiModel,
@@ -33,6 +37,8 @@ class LoadedAddCharacterDialogUiState extends BaseState {
   }) : super(isLoading: false);
 
   LoadedAddCharacterDialogUiState copy({
+    String? newName,
+    bool? newIsNameError,
     ChoiceUiModel newClassUiModel = _unchanged,
     ChoiceUiModel newSubclassUiModel = _unchanged,
     ChoiceUiModel newAncestryUiModel = _unchanged,
@@ -47,6 +53,8 @@ class LoadedAddCharacterDialogUiState extends BaseState {
     ChoiceUiModel newSecondDomainAbilityUiModel = _unchanged,
     ChoiceUiModel? newThirdDomainAbilityUiModel = _unchanged,
   }) => LoadedAddCharacterDialogUiState(
+    name: newName ?? name,
+    isNameError: newIsNameError ?? isNameError,
     classUiModel: newClassUiModel == _unchanged ? classUiModel : newClassUiModel,
     subclassUiModel: newSubclassUiModel == _unchanged ? subclassUiModel : newSubclassUiModel,
     ancestryUiModel: newAncestryUiModel == _unchanged ? ancestryUiModel : newAncestryUiModel,

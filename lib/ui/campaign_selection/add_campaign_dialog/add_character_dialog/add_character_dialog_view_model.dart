@@ -13,7 +13,7 @@ class AddCharacterDialogViewModel extends ViewModel {
 
   AddCharacterDialogViewModel(this._srdParser, this._playerCharacterRepository);
 
-  var name = "";
+  String get name => (currentState is LoadedAddCharacterDialogUiState) ? (currentState as LoadedAddCharacterDialogUiState).name : "";
   var _traitBonusList = _originalTraitBonusList.toList();
   List<ChoiceChildUiModel> _domainAbilities = List.empty(growable: true);
   static const _originalTraitBonusList = [2, 1, 1, 0, 0, -1];
@@ -29,11 +29,7 @@ class AddCharacterDialogViewModel extends ViewModel {
       selectedChild: null,
       children: classes.mapToList((c) => ChoiceChildUiModel(key: c.key, name: c.name)),
     );
-    final subclassUiModel = ChoiceUiModel(type: ChoiceType.Subclass,
-        isEnabled: false,
-        isError: false,
-        selectedChild: null,
-        children: []);
+    final subclassUiModel = ChoiceUiModel(type: ChoiceType.Subclass, isEnabled: false, isError: false, selectedChild: null, children: []);
     final ancestryUiModel = ChoiceUiModel(
       type: ChoiceType.Ancestry,
       isEnabled: true,
@@ -48,17 +44,23 @@ class AddCharacterDialogViewModel extends ViewModel {
       selectedChild: null,
       children: communities.mapToList((c) => ChoiceChildUiModel(key: c.key, name: c.name)),
     );
-    final firstDomainUiModel = ChoiceUiModel(type: ChoiceType.FirstDomainAbility,
-        isEnabled: false,
-        isError: false,
-        selectedChild: null,
-        children: []);
-    final secondDomainUiModel = ChoiceUiModel(type: ChoiceType.SecondDomainAbility,
-        isEnabled: false,
-        isError: false,
-        selectedChild: null,
-        children: []);
+    final firstDomainUiModel = ChoiceUiModel(
+      type: ChoiceType.FirstDomainAbility,
+      isEnabled: false,
+      isError: false,
+      selectedChild: null,
+      children: [],
+    );
+    final secondDomainUiModel = ChoiceUiModel(
+      type: ChoiceType.SecondDomainAbility,
+      isEnabled: false,
+      isError: false,
+      selectedChild: null,
+      children: [],
+    );
     final uiState = LoadedAddCharacterDialogUiState(
+      name: "",
+      isNameError: false,
       classUiModel: classUiModel,
       subclassUiModel: subclassUiModel,
       ancestryUiModel: ancestryUiModel,
@@ -76,19 +78,23 @@ class AddCharacterDialogViewModel extends ViewModel {
     notify(uiState);
   }
 
-  void nameChanged(String newText) {
-    name = newText;
+  void nameChanged(String newName) {
+    _updateState((currentUiState) {
+      return currentUiState.copy(newName: newName, newIsNameError: false);
+    });
   }
 
   void classChanged(ChoiceChildUiModel? selectedChild) async {
     if (selectedChild != null) {
       final selectedClass = await _srdParser.getClass(selectedChild.key);
       final abilities = selectedClass!.domains.flatMap((domain) => domain.abilitiesByLevel[1]!.mapToList((a) => (domain, a))); //TODO next levels
-      _domainAbilities = abilities.map((domainAndAbility) {
-        final domain = domainAndAbility.$1;
-        final ability = domainAndAbility.$2;
-        return ChoiceChildUiModel(key: ability.key, name: "${ability.name} (${domain.name} lvl ${ability.level})");
-      }).toList(growable: true);
+      _domainAbilities = abilities
+          .map((domainAndAbility) {
+            final domain = domainAndAbility.$1;
+            final ability = domainAndAbility.$2;
+            return ChoiceChildUiModel(key: ability.key, name: "${ability.name} (${domain.name} lvl ${ability.level})");
+          })
+          .toList(growable: true);
       final firstDomainUiModel = _createChoiceUiModel(ChoiceType.FirstDomainAbility);
       final secondDomainUiModel = _createChoiceUiModel(ChoiceType.SecondDomainAbility);
       final subclasses = selectedClass.subclasses;
@@ -101,22 +107,18 @@ class AddCharacterDialogViewModel extends ViewModel {
       );
       _updateState((currentUiState) {
         final newClassUiModel = currentUiState.classUiModel.select(selectedChild);
-        return currentUiState.copy(newClassUiModel: newClassUiModel,
-            newSubclassUiModel: newSubclassUiModel,
-            newFirstDomainAbilityUiModel: firstDomainUiModel,
-            newSecondDomainAbilityUiModel: secondDomainUiModel);
+        return currentUiState.copy(
+          newClassUiModel: newClassUiModel,
+          newSubclassUiModel: newSubclassUiModel,
+          newFirstDomainAbilityUiModel: firstDomainUiModel,
+          newSecondDomainAbilityUiModel: secondDomainUiModel,
+        );
       });
     }
   }
 
   ChoiceUiModel _createChoiceUiModel(ChoiceType choiceType) {
-    return ChoiceUiModel(
-        type: choiceType,
-        isEnabled: true,
-        isError: false,
-        selectedChild: null,
-        children: _domainAbilities
-    );
+    return ChoiceUiModel(type: choiceType, isEnabled: true, isError: false, selectedChild: null, children: _domainAbilities);
   }
 
   void subclassChanged(ChoiceChildUiModel? selectedChild) async {
@@ -125,11 +127,13 @@ class AddCharacterDialogViewModel extends ViewModel {
         final newSubclassUiModel = currentUiState.subclassUiModel.select(selectedChild);
         final ChoiceUiModel? thirdDomainAbilityUiModel;
         if (selectedChild.key == SUBCLASS_SCHOOL_OF_KNOWLEDGE) {
-          thirdDomainAbilityUiModel = ChoiceUiModel(type: ChoiceType.ThirdDomainAbility,
-              isEnabled: true,
-              isError: false,
-              selectedChild: null,
-              children: _domainAbilities.mapToList((ability) => ChoiceChildUiModel(key: ability.key, name: ability.name)));
+          thirdDomainAbilityUiModel = ChoiceUiModel(
+            type: ChoiceType.ThirdDomainAbility,
+            isEnabled: true,
+            isError: false,
+            selectedChild: null,
+            children: _domainAbilities.mapToList((ability) => ChoiceChildUiModel(key: ability.key, name: ability.name)),
+          );
         } else {
           thirdDomainAbilityUiModel = null;
         }
@@ -240,20 +244,19 @@ class AddCharacterDialogViewModel extends ViewModel {
         final ChoiceUiModel? thirdDomainAbilityUiModel;
         if (choiceType == ChoiceType.ThirdDomainAbility) {
           thirdDomainAbilityUiModel = newUiModel;
-        }
-        else if (currentUiState.subclassUiModel.selectedChild?.key == SUBCLASS_SCHOOL_OF_KNOWLEDGE) {
+        } else if (currentUiState.subclassUiModel.selectedChild?.key == SUBCLASS_SCHOOL_OF_KNOWLEDGE) {
           thirdDomainAbilityUiModel = _createChoiceUiModel(ChoiceType.ThirdDomainAbility);
         } else {
           thirdDomainAbilityUiModel = null;
         }
         return currentUiState.copy(
-            newFirstDomainAbilityUiModel: choiceType == ChoiceType.FirstDomainAbility
-                ? newUiModel
-                : _createChoiceUiModel(ChoiceType.FirstDomainAbility),
-            newSecondDomainAbilityUiModel: choiceType == ChoiceType.SecondDomainAbility
-                ? newUiModel
-                : _createChoiceUiModel(ChoiceType.SecondDomainAbility),
-            newThirdDomainAbilityUiModel: thirdDomainAbilityUiModel
+          newFirstDomainAbilityUiModel: choiceType == ChoiceType.FirstDomainAbility
+              ? newUiModel
+              : _createChoiceUiModel(ChoiceType.FirstDomainAbility),
+          newSecondDomainAbilityUiModel: choiceType == ChoiceType.SecondDomainAbility
+              ? newUiModel
+              : _createChoiceUiModel(ChoiceType.SecondDomainAbility),
+          newThirdDomainAbilityUiModel: thirdDomainAbilityUiModel,
         );
       });
     }
@@ -274,14 +277,112 @@ class AddCharacterDialogViewModel extends ViewModel {
   }
 
   PlayerCharacter? buildPlayerCharacter() {
-    // TODO
+    final currentUiState = currentState;
+    if (currentUiState is LoadedAddCharacterDialogUiState) {
+      final bool isNameError = currentUiState.name.isEmpty;
+      final bool isClassUiModelError = currentUiState.classUiModel.selectedChild == null;
+      final bool isSubclassUiModelError = currentUiState.subclassUiModel.selectedChild == null;
+      final bool isAncestryUiModelError = currentUiState.ancestryUiModel.selectedChild == null;
+      final bool isCommunityUiModelError = currentUiState.communityUiModel.selectedChild == null;
+      final bool isAgilityUiModelError = currentUiState.agilityUiModel.selectedChild == null;
+      final bool isStrengthUiModelError = currentUiState.strengthUiModel.selectedChild == null;
+      final bool isFinesseUiModelError = currentUiState.finesseUiModel.selectedChild == null;
+      final bool isInstinctUiModelError = currentUiState.instinctUiModel.selectedChild == null;
+      final bool isPresenceUiModelError = currentUiState.presenceUiModel.selectedChild == null;
+      final bool isKnowledgeUiModelError = currentUiState.knowledgeUiModel.selectedChild == null;
+      final bool isFirstDomainAbilityUiModelError = currentUiState.firstDomainAbilityUiModel.selectedChild == null;
+      final bool isSecondDomainAbilityUiModelError = currentUiState.secondDomainAbilityUiModel.selectedChild == null;
+      final bool isThirdDomainAbilityUiModelError;
+      if (currentUiState.thirdDomainAbilityUiModel == null) {
+        isThirdDomainAbilityUiModelError = false;
+      } else {
+        isThirdDomainAbilityUiModelError = currentUiState.thirdDomainAbilityUiModel!.selectedChild == null;
+      }
+
+      if (isNameError ||
+          isClassUiModelError ||
+          isSubclassUiModelError ||
+          isAncestryUiModelError ||
+          isCommunityUiModelError ||
+          isAgilityUiModelError ||
+          isStrengthUiModelError ||
+          isFinesseUiModelError ||
+          isInstinctUiModelError ||
+          isPresenceUiModelError ||
+          isKnowledgeUiModelError ||
+          isFirstDomainAbilityUiModelError ||
+          isSecondDomainAbilityUiModelError ||
+          isThirdDomainAbilityUiModelError) {
+        LoadedAddCharacterDialogUiState newUiState = currentUiState;
+        if (isNameError) {
+          newUiState = newUiState.copy(newIsNameError: isNameError);
+        }
+        if (isClassUiModelError) {
+          newUiState = newUiState.copy(newClassUiModel: newUiState.classUiModel.withError());
+        }
+        if (isSubclassUiModelError) {
+          newUiState = newUiState.copy(newSubclassUiModel: newUiState.subclassUiModel.withError());
+        }
+        if (isAncestryUiModelError) {
+          newUiState = newUiState.copy(newAncestryUiModel: newUiState.ancestryUiModel.withError());
+        }
+        if (isCommunityUiModelError) {
+          newUiState = newUiState.copy(newCommunityUiModel: newUiState.communityUiModel.withError());
+        }
+        if (isAgilityUiModelError) {
+          newUiState = newUiState.copy(newAgilityUiModel: newUiState.agilityUiModel.withError());
+        }
+        if (isStrengthUiModelError) {
+          newUiState = newUiState.copy(newStrengthUiModel: newUiState.strengthUiModel.withError());
+        }
+        if (isFinesseUiModelError) {
+          newUiState = newUiState.copy(newFinesseUiModel: newUiState.finesseUiModel.withError());
+        }
+        if (isInstinctUiModelError) {
+          newUiState = newUiState.copy(newInstinctUiModel: newUiState.instinctUiModel.withError());
+        }
+        if (isPresenceUiModelError) {
+          newUiState = newUiState.copy(newPresenceUiModel: newUiState.presenceUiModel.withError());
+        }
+        if (isKnowledgeUiModelError) {
+          newUiState = newUiState.copy(newKnowledgeUiModel: newUiState.knowledgeUiModel.withError());
+        }
+        if (isFirstDomainAbilityUiModelError) {
+          newUiState = newUiState.copy(newFirstDomainAbilityUiModel: newUiState.firstDomainAbilityUiModel.withError());
+        }
+        if (isSecondDomainAbilityUiModelError) {
+          newUiState = newUiState.copy(newSecondDomainAbilityUiModel: newUiState.secondDomainAbilityUiModel.withError());
+        }
+        if (isThirdDomainAbilityUiModelError) {
+          newUiState = newUiState.copy(newThirdDomainAbilityUiModel: newUiState.thirdDomainAbilityUiModel!.withError());
+        }
+
+        notify(newUiState);
+        return null;
+      }
+
+      // TODO ok
+
+      // return PlayerCharacter(
+      //   key: key,
+      //   name: name,
+      //   daggerheartClass: daggerheartClass,
+      //   level: level,
+      //   domainAbilities: domainAbilities,
+      //   subclass: subclass,
+      //   backgroundAnswers: backgroundAnswers,
+      //   notes: notes,
+      // );
+    }
   }
 
-  void _updateState(LoadedAddCharacterDialogUiState Function(LoadedAddCharacterDialogUiState) function) {
+  void _updateState(LoadedAddCharacterDialogUiState? Function(LoadedAddCharacterDialogUiState) function) {
     final currentUiState = currentState;
     if (currentUiState is LoadedAddCharacterDialogUiState) {
       final newUiState = function(currentUiState);
-      notify(newUiState);
+      if (newUiState != null) {
+        notify(newUiState);
+      }
     }
   }
 
@@ -296,5 +397,4 @@ class AddCharacterDialogViewModel extends ViewModel {
   }
 
   String _traitBonusToString(int bonus) => '${bonus >= 0 ? '+' : ''}$bonus';
-
 }

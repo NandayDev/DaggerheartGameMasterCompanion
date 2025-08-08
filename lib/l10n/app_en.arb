@@ -34,5 +34,6 @@
   "addCharacterDialogSelectCommunity": "Select a community",
   "addCharacterDialogSelectDomain": "Select a domain ability",
   "addCharacterDialogResetTraits": "Reset traits",
-  "addCharacterDialogSaveError": "Please fill all highlighted fields before saving"
+  "addCharacterDialogSaveError": "Please fill all highlighted fields before saving",
+  "addCharacterDialogHintError": "Please choose a value"
 }

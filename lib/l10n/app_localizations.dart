@@ -307,6 +307,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please fill all highlighted fields before saving'**
   String get addCharacterDialogSaveError;
+
+  /// No description provided for @addCharacterDialogHintError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please choose a value'**
+  String get addCharacterDialogHintError;
 }
 
 class _AppLocalizationsDelegate

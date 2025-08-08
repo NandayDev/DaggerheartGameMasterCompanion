@@ -10,9 +10,20 @@ class ChoiceUiModel {
   const ChoiceUiModel({required this.type, required this.isEnabled, required this.isError, required this.selectedChild, required this.children});
 
   ChoiceUiModel select(ChoiceChildUiModel? selectedChild) =>
-      ChoiceUiModel(type: type, isEnabled: isEnabled, isError: isError, selectedChild: selectedChild, children: children);
+      ChoiceUiModel(type: type,
+          isEnabled: isEnabled,
+          isError: false,
+          selectedChild: selectedChild,
+          children: children);
 
   ChoiceUiModel enable() => ChoiceUiModel(type: type, isEnabled: true, isError: isError, selectedChild: selectedChild, children: children);
+
+  ChoiceUiModel withError() =>
+      ChoiceUiModel(type: type,
+          isEnabled: isEnabled,
+          isError: true,
+          selectedChild: selectedChild,
+          children: children);
 }
 
 class ChoiceChildUiModel {

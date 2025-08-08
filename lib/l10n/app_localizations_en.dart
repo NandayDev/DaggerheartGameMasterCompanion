@@ -113,4 +113,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addCharacterDialogSaveError => 'Please fill all highlighted fields before saving';
+
+  @override
+  String get addCharacterDialogHintError => 'Please choose a value';
 }

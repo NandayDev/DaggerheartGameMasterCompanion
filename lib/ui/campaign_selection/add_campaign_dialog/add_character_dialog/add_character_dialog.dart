@@ -51,10 +51,11 @@ class _AddCharacterDialogState extends DaggerheartState<AddCharacterDialog, AddC
                   TextField(
                     decoration: InputDecoration(
                       //labelText: 'Etichetta',
-                      //hintText: 'Seleziona o scrivi',
+                      hintStyle: theme.textTheme.labelMedium!.copyWith(color: Colors.red),
+                      hintText: uiState.isNameError ? localizations.addCharacterDialogHintError : null,
                       border: OutlineInputBorder(), // bordo outline
-                      enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue, width: 2)),
+                      enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: uiState.isNameError ? Colors.red : Colors.grey)),
+                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: uiState.isNameError ? Colors.red : Colors.blue, width: 2)),
                       contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                     ),
                     textAlign: TextAlign.center,
@@ -149,6 +150,7 @@ class _AddCharacterDialogState extends DaggerheartState<AddCharacterDialog, AddC
 
   Widget _createDropdown(ChoiceUiModel uiModel, double width, String title, String hint, Function(ChoiceChildUiModel?) onSelectedValueChanged) {
     final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 5.0,
@@ -162,6 +164,7 @@ class _AddCharacterDialogState extends DaggerheartState<AddCharacterDialog, AddC
           enabled: uiModel.isEnabled,
           width: width,
           hintText: hint,
+          errorText: uiModel.isError ? localizations.addCharacterDialogHintError : null,
           enableFilter: false,
           requestFocusOnTap: false,
           initialSelection: uiModel.selectedChild,

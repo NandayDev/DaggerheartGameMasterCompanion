@@ -113,4 +113,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get addCharacterDialogSaveError => 'Compila correttamente tutti i campi evidenziati prima di salvare';
+
+  @override
+  String get addCharacterDialogHintError => 'Scegli un valore';
 }

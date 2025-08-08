@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:daggerheart_game_master_companion/extensions/list_extensions.dart';
+import 'package:daggerheart_game_master_companion/models/srd/ability.dart';
 import 'package:daggerheart_game_master_companion/models/srd/daggerheart_class.dart';
 import 'package:daggerheart_game_master_companion/models/srd/player_character.dart';
 import 'package:daggerheart_game_master_companion/services/data/data_source.dart';
@@ -29,8 +30,9 @@ class PlayerCharacterRepositoryImpl implements PlayerCharacterRepository {
       _PLAYER_NAME: playerCharacter.name,
       _PLAYER_CLASS_KEY: playerCharacter.daggerheartClass.key,
       _PLAYER_LEVEL: playerCharacter.level,
-      _PLAYER_DOMAIN_KEY: playerCharacter.domain.key,
+      _PLAYER_DOMAIN_ABILITIES_KEY: playerCharacter.domainAbilities.mapToList((a) => a.key),
       _PLAYER_SUBCLASS_KEY: playerCharacter.subclass.key,
+      _PLAYER_BACKGROUND_ANSWERS: playerCharacter.backgroundAnswers,
       _PLAYER_NOTES: playerCharacter.notes,
     };
     final jsonString = _jsonEncoder.convert(json);
@@ -59,11 +61,14 @@ class PlayerCharacterRepositoryImpl implements PlayerCharacterRepository {
       return Result.failure(exception);
     }
 
-    final domainKey = playerCharacterJson[_PLAYER_DOMAIN_KEY];
-    final domain = daggerheartClass.domains.firstWhereOrNull((d) => d.key == domainKey);
-    if (domain == null) {
-      final exception = DaggerheartNotFoundException("domain", domainKey);
-      return Result.failure(exception);
+    final List<Ability> domainAbilities = [];
+    for (String domainAbilityKey in playerCharacterJson[_PLAYER_DOMAIN_ABILITIES_KEY]) {
+      final ability = await _srdParser.getAbility(domainAbilityKey);
+      if (ability == null) {
+        final exception = DaggerheartNotFoundException("ability", domainAbilityKey);
+        return Result.failure(exception);
+      }
+      domainAbilities.add(ability);
     }
 
     final subclassKey = playerCharacterJson[_PLAYER_SUBCLASS_KEY];
@@ -78,8 +83,9 @@ class PlayerCharacterRepositoryImpl implements PlayerCharacterRepository {
         name: playerCharacterJson[_PLAYER_NAME],
         daggerheartClass: daggerheartClass,
         level: playerCharacterJson[_PLAYER_LEVEL],
-        domain: domain,
+        domainAbilities: domainAbilities,
         subclass: subclass,
+        backgroundAnswers: (playerCharacterJson[_PLAYER_BACKGROUND_ANSWERS] as Iterable<dynamic>).castToList<String>(),
         notes: (playerCharacterJson[_PLAYER_NOTES] as Iterable<dynamic>).castToList<String>()
     );
 
@@ -90,8 +96,9 @@ class PlayerCharacterRepositoryImpl implements PlayerCharacterRepository {
   static const _PLAYER_NAME = "name";
   static const _PLAYER_CLASS_KEY = "class";
   static const _PLAYER_LEVEL = "level";
-  static const _PLAYER_DOMAIN_KEY = "domain";
+  static const _PLAYER_DOMAIN_ABILITIES_KEY = "domainAbilities";
   static const _PLAYER_SUBCLASS_KEY = "subclass";
+  static const _PLAYER_BACKGROUND_ANSWERS = "backgroundAnswers";
   static const _PLAYER_NOTES = "notes";
 }
 

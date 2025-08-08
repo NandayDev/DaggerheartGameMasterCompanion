@@ -34,5 +34,6 @@
   "addCharacterDialogSelectCommunity": "Seleziona una comunità",
   "addCharacterDialogSelectDomain": "Seleziona abilità di dominio",
   "addCharacterDialogResetTraits": "Resetta valori",
-  "addCharacterDialogSaveError": "Compila correttamente tutti i campi evidenziati prima di salvare"
+  "addCharacterDialogSaveError": "Compila correttamente tutti i campi evidenziati prima di salvare",
+  "addCharacterDialogHintError": "Scegli un valore"
 }
