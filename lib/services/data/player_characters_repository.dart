@@ -29,6 +29,8 @@ class PlayerCharacterRepositoryImpl implements PlayerCharacterRepository {
       _PLAYER_KEY: playerCharacter.key,
       _PLAYER_NAME: playerCharacter.name,
       _PLAYER_CLASS_KEY: playerCharacter.daggerheartClass.key,
+      _PLAYER_ANCESTRY_KEY: playerCharacter.ancestry.key,
+      _PLAYER_COMMUNITY_KEY: playerCharacter.community.key,
       _PLAYER_LEVEL: playerCharacter.level,
       _PLAYER_DOMAIN_ABILITIES_KEY: playerCharacter.domainAbilities.mapToList((a) => a.key),
       _PLAYER_SUBCLASS_KEY: playerCharacter.subclass.key,
@@ -78,10 +80,26 @@ class PlayerCharacterRepositoryImpl implements PlayerCharacterRepository {
       return Result.failure(exception);
     }
 
+    final ancestryKey = playerCharacterJson[_PLAYER_ANCESTRY_KEY];
+    final ancestry = await _srdParser.getAncestry(ancestryKey);
+    if (ancestry == null) {
+      final exception = DaggerheartNotFoundException("ancestry", ancestryKey);
+      return Result.failure(exception);
+    }
+
+    final communityKey = playerCharacterJson[_PLAYER_COMMUNITY_KEY];
+    final community = await _srdParser.getCommunity(communityKey);
+    if (community == null) {
+      final exception = DaggerheartNotFoundException("community", communityKey);
+      return Result.failure(exception);
+    }
+
     final playerCharacter = PlayerCharacter(
         key: key,
         name: playerCharacterJson[_PLAYER_NAME],
         daggerheartClass: daggerheartClass,
+        ancestry: ancestry,
+        community: community,
         level: playerCharacterJson[_PLAYER_LEVEL],
         domainAbilities: domainAbilities,
         subclass: subclass,
@@ -95,6 +113,8 @@ class PlayerCharacterRepositoryImpl implements PlayerCharacterRepository {
   static const _PLAYER_KEY = "key";
   static const _PLAYER_NAME = "name";
   static const _PLAYER_CLASS_KEY = "class";
+  static const _PLAYER_ANCESTRY_KEY = "ancestry";
+  static const _PLAYER_COMMUNITY_KEY = "community";
   static const _PLAYER_LEVEL = "level";
   static const _PLAYER_DOMAIN_ABILITIES_KEY = "domainAbilities";
   static const _PLAYER_SUBCLASS_KEY = "subclass";

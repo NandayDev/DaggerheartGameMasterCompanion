@@ -45,6 +45,7 @@ void _registerDependencyInjections() {
       .registerSingleton<LocalDataSource>(() => LocalJsonDataSource())
       .registerSingleton<SrdParser>(() => SrdParserImpl())
       .registerFactory<CampaignSelectionViewModel>(() => CampaignSelectionViewModel(DependencyInjector.resolve()))
-      .registerFactory<AddCampaignDialogViewModel>(() => AddCampaignDialogViewModel())
+      .registerFactory<AddCampaignDialogViewModel>(() =>
+      AddCampaignDialogViewModel(DependencyInjector.resolve()))
       .registerFactory<AddCharacterDialogViewModel>(() => AddCharacterDialogViewModel(DependencyInjector.resolve(), DependencyInjector.resolve()));
 }

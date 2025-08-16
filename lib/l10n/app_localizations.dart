@@ -313,6 +313,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please choose a value'**
   String get addCharacterDialogHintError;
+
+  /// No description provided for @addCharacterDialogSavingError.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred'**
+  String get addCharacterDialogSavingError;
 }
 
 class _AppLocalizationsDelegate

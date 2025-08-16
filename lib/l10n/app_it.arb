@@ -35,5 +35,6 @@
   "addCharacterDialogSelectDomain": "Seleziona abilità di dominio",
   "addCharacterDialogResetTraits": "Resetta valori",
   "addCharacterDialogSaveError": "Compila correttamente tutti i campi evidenziati prima di salvare",
-  "addCharacterDialogHintError": "Scegli un valore"
+  "addCharacterDialogHintError": "Scegli un valore",
+  "addCharacterDialogSavingError": "Errore di salvataggio"
 }

@@ -64,13 +64,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get knowledge => 'Knowledge';
 
   @override
-  String get campaignSelectionAddCampaignHint => 'No campaigns saved. Why don\'t you start a new one?';
+  String get campaignSelectionAddCampaignHint =>
+      'No campaigns saved. Why don\'t you start a new one?';
 
   @override
   String get campaignSelectionAddCampaign => 'Create new campaign';
 
   @override
-  String get campaignSelectionError => 'Error while loading this campaign. Data may have been altered.';
+  String get campaignSelectionError =>
+      'Error while loading this campaign. Data may have been altered.';
 
   @override
   String get addCampaignDialogNewCampaign => 'New campaign';
@@ -116,4 +118,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addCharacterDialogHintError => 'Please choose a value';
+
+  @override
+  String get addCharacterDialogSavingError => 'An error occurred';
 }

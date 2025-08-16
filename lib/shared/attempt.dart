@@ -11,16 +11,18 @@ class Attempt {
 
   Exception exceptionOrThrow() => _exception!;
 
-  void onSuccess(Function() function) {
+  Attempt onSuccess(Function() function) {
     if (isSuccess()) {
       function();
     }
+    return this;
   }
 
-  void onFailure(Function(Exception) function) {
+  Attempt onFailure(Function(Exception) function) {
     final exception = _exception;
     if (exception != null) {
       function(exception);
     }
+    return this;
   }
 }

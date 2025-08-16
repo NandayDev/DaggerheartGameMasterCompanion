@@ -70,7 +70,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get campaignSelectionAddCampaign => 'Crea una nuova campagna';
 
   @override
-  String get campaignSelectionError => 'Errore nel caricamento della campagna. I dati potrebbero essere stati alterati.';
+  String get campaignSelectionError =>
+      'Errore nel caricamento della campagna. I dati potrebbero essere stati alterati.';
 
   @override
   String get addCampaignDialogNewCampaign => 'Nuova campagna';
@@ -112,8 +113,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get addCharacterDialogResetTraits => 'Resetta valori';
 
   @override
-  String get addCharacterDialogSaveError => 'Compila correttamente tutti i campi evidenziati prima di salvare';
+  String get addCharacterDialogSaveError =>
+      'Compila correttamente tutti i campi evidenziati prima di salvare';
 
   @override
   String get addCharacterDialogHintError => 'Scegli un valore';
+
+  @override
+  String get addCharacterDialogSavingError => 'Errore di salvataggio';
 }

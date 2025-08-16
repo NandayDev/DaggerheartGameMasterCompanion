@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:daggerheart_game_master_companion/constants.dart';
 import 'package:daggerheart_game_master_companion/extensions/list_extensions.dart';
 import 'package:daggerheart_game_master_companion/models/srd/player_character.dart';
@@ -6,6 +8,7 @@ import 'package:daggerheart_game_master_companion/services/srd_parser.dart';
 import 'package:daggerheart_game_master_companion/ui/base/view_model.dart';
 import 'package:daggerheart_game_master_companion/ui/campaign_selection/add_campaign_dialog/add_character_dialog/add_character_dialog_ui_state.dart';
 import 'package:daggerheart_game_master_companion/ui/campaign_selection/add_campaign_dialog/add_character_dialog/choice_ui_model.dart';
+import 'package:uuid/uuid.dart';
 
 class AddCharacterDialogViewModel extends ViewModel {
   final SrdParser _srdParser;
@@ -13,53 +16,115 @@ class AddCharacterDialogViewModel extends ViewModel {
 
   AddCharacterDialogViewModel(this._srdParser, this._playerCharacterRepository);
 
-  String get name => (currentState is LoadedAddCharacterDialogUiState) ? (currentState as LoadedAddCharacterDialogUiState).name : "";
+  String get name =>
+      (currentState is LoadedAddCharacterDialogUiState)
+          ? (currentState as LoadedAddCharacterDialogUiState).name
+          : "";
   var _traitBonusList = _originalTraitBonusList.toList();
   List<ChoiceChildUiModel> _domainAbilities = List.empty(growable: true);
   static const _originalTraitBonusList = [2, 1, 1, 0, 0, -1];
 
-  void initialize() async {
+  PlayerCharacter? _characterToUpdate;
+  final uuid = Uuid();
+
+  final _eventStreamController = StreamController<PlayerCharacter>();
+
+  Stream get eventStream => _eventStreamController.stream;
+
+  void initialize(PlayerCharacter? playerCharacter) async {
+    _characterToUpdate = playerCharacter;
     final classes = await _srdParser.getAllClasses();
     final ancestries = await _srdParser.getAllAncestries();
     final communities = await _srdParser.getAllCommunities();
+    final classUiModels = classes.mapToList((c) => ChoiceChildUiModel(key: c.key, name: c.name));
     final classUiModel = ChoiceUiModel(
       type: ChoiceType.Class,
       isEnabled: true,
       isError: false,
-      selectedChild: null,
-      children: classes.mapToList((c) => ChoiceChildUiModel(key: c.key, name: c.name)),
+      selectedChild: classUiModels.firstWhereOrNull(
+            (c) => playerCharacter?.daggerheartClass.key == c.key,
+      ),
+      children: classUiModels,
     );
-    final subclassUiModel = ChoiceUiModel(type: ChoiceType.Subclass, isEnabled: false, isError: false, selectedChild: null, children: []);
+
+    final List<ChoiceChildUiModel> subclassUiModels;
+    ChoiceChildUiModel? selectedSubclassUiModel;
+    if (playerCharacter == null) {
+      subclassUiModels = [];
+      selectedSubclassUiModel = null;
+    } else {
+      subclassUiModels = playerCharacter.daggerheartClass.subclasses.mapToList(
+            (c) => ChoiceChildUiModel(key: c.key, name: c.name),
+      );
+      selectedSubclassUiModel = subclassUiModels.firstWhere(
+            (subclass) => subclass.key == playerCharacter.subclass.key,
+      );
+    }
+
+    final subclassUiModel = ChoiceUiModel(
+      type: ChoiceType.Subclass,
+      isEnabled: playerCharacter != null,
+      isError: false,
+      selectedChild: selectedSubclassUiModel,
+      children: subclassUiModels,
+    );
+
+    final ancestryUiModels = ancestries.mapToList((c) =>
+        ChoiceChildUiModel(key: c.key, name: c.name));
     final ancestryUiModel = ChoiceUiModel(
       type: ChoiceType.Ancestry,
       isEnabled: true,
       isError: false,
-      selectedChild: null,
-      children: ancestries.mapToList((c) => ChoiceChildUiModel(key: c.key, name: c.name)),
+      selectedChild: ancestryUiModels.firstWhereOrNull((ancestry) =>
+      playerCharacter?.ancestry.key == ancestry.key),
+      children: ancestryUiModels,
     );
+
+    final communityUiModels = communities.mapToList((c) =>
+        ChoiceChildUiModel(key: c.key, name: c.name));
     final communityUiModel = ChoiceUiModel(
       type: ChoiceType.Community,
       isEnabled: true,
       isError: false,
-      selectedChild: null,
-      children: communities.mapToList((c) => ChoiceChildUiModel(key: c.key, name: c.name)),
+      selectedChild: communityUiModels.firstWhereOrNull((community) =>
+      playerCharacter?.community.key == community.key),
+      children: communityUiModels,
     );
+
+    final List<ChoiceChildUiModel> domainUiModels;
+    ChoiceChildUiModel? firstSelectedDomainUiModel;
+    ChoiceChildUiModel? secondSelectedDomainUiModel;
+    if (playerCharacter == null) {
+      domainUiModels = [];
+      firstSelectedDomainUiModel = null;
+      secondSelectedDomainUiModel = null;
+    } else {
+      domainUiModels = playerCharacter.daggerheartClass.domains.mapToList(
+            (c) => ChoiceChildUiModel(key: c.key, name: c.name),
+      );
+      firstSelectedDomainUiModel = domainUiModels.firstWhere(
+            (domain) => domain.key == playerCharacter.domainAbilities[0].key,
+      );
+      secondSelectedDomainUiModel = domainUiModels.firstWhere(
+            (domain) => domain.key == playerCharacter.domainAbilities[1].key,
+      );
+    }
     final firstDomainUiModel = ChoiceUiModel(
       type: ChoiceType.FirstDomainAbility,
-      isEnabled: false,
+      isEnabled: playerCharacter != null,
       isError: false,
-      selectedChild: null,
-      children: [],
+      selectedChild: firstSelectedDomainUiModel,
+      children: domainUiModels,
     );
     final secondDomainUiModel = ChoiceUiModel(
       type: ChoiceType.SecondDomainAbility,
-      isEnabled: false,
+      isEnabled: playerCharacter != null,
       isError: false,
-      selectedChild: null,
-      children: [],
+      selectedChild: secondSelectedDomainUiModel,
+      children: domainUiModels,
     );
     final uiState = LoadedAddCharacterDialogUiState(
-      name: "",
+      name: playerCharacter?.name ?? "",
       isNameError: false,
       classUiModel: classUiModel,
       subclassUiModel: subclassUiModel,
@@ -87,12 +152,17 @@ class AddCharacterDialogViewModel extends ViewModel {
   void classChanged(ChoiceChildUiModel? selectedChild) async {
     if (selectedChild != null) {
       final selectedClass = await _srdParser.getClass(selectedChild.key);
-      final abilities = selectedClass!.domains.flatMap((domain) => domain.abilitiesByLevel[1]!.mapToList((a) => (domain, a))); //TODO next levels
+      final abilities = selectedClass!.domains.flatMap(
+            (domain) => domain.abilitiesByLevel[1]!.mapToList((a) => (domain, a)),
+      ); //TODO next levels
       _domainAbilities = abilities
           .map((domainAndAbility) {
             final domain = domainAndAbility.$1;
             final ability = domainAndAbility.$2;
-            return ChoiceChildUiModel(key: ability.key, name: "${ability.name} (${domain.name} lvl ${ability.level})");
+            return ChoiceChildUiModel(
+              key: ability.key,
+              name: "${ability.name} (${domain.name} lvl ${ability.level})",
+            );
           })
           .toList(growable: true);
       final firstDomainUiModel = _createChoiceUiModel(ChoiceType.FirstDomainAbility);
@@ -118,7 +188,13 @@ class AddCharacterDialogViewModel extends ViewModel {
   }
 
   ChoiceUiModel _createChoiceUiModel(ChoiceType choiceType) {
-    return ChoiceUiModel(type: choiceType, isEnabled: true, isError: false, selectedChild: null, children: _domainAbilities);
+    return ChoiceUiModel(
+      type: choiceType,
+      isEnabled: true,
+      isError: false,
+      selectedChild: null,
+      children: _domainAbilities,
+    );
   }
 
   void subclassChanged(ChoiceChildUiModel? selectedChild) async {
@@ -132,12 +208,17 @@ class AddCharacterDialogViewModel extends ViewModel {
             isEnabled: true,
             isError: false,
             selectedChild: null,
-            children: _domainAbilities.mapToList((ability) => ChoiceChildUiModel(key: ability.key, name: ability.name)),
+            children: _domainAbilities.mapToList(
+                  (ability) => ChoiceChildUiModel(key: ability.key, name: ability.name),
+            ),
           );
         } else {
           thirdDomainAbilityUiModel = null;
         }
-        return currentUiState.copy(newSubclassUiModel: newSubclassUiModel, newThirdDomainAbilityUiModel: thirdDomainAbilityUiModel);
+        return currentUiState.copy(
+          newSubclassUiModel: newSubclassUiModel,
+          newThirdDomainAbilityUiModel: thirdDomainAbilityUiModel,
+        );
       });
     }
   }
@@ -197,22 +278,40 @@ class AddCharacterDialogViewModel extends ViewModel {
         return currentUiState.copy(
           newAgilityUiModel: choiceType == ChoiceType.Agility
               ? newUiModel
-              : _createTraitUiModel(ChoiceType.Agility, previousUiModel: currentUiState.agilityUiModel),
+              : _createTraitUiModel(
+            ChoiceType.Agility,
+            previousUiModel: currentUiState.agilityUiModel,
+          ),
           newStrengthUiModel: choiceType == ChoiceType.Strength
               ? newUiModel
-              : _createTraitUiModel(ChoiceType.Strength, previousUiModel: currentUiState.strengthUiModel),
+              : _createTraitUiModel(
+            ChoiceType.Strength,
+            previousUiModel: currentUiState.strengthUiModel,
+          ),
           newFinesseUiModel: choiceType == ChoiceType.Finesse
               ? newUiModel
-              : _createTraitUiModel(ChoiceType.Finesse, previousUiModel: currentUiState.finesseUiModel),
+              : _createTraitUiModel(
+            ChoiceType.Finesse,
+            previousUiModel: currentUiState.finesseUiModel,
+          ),
           newInstinctUiModel: choiceType == ChoiceType.Instinct
               ? newUiModel
-              : _createTraitUiModel(ChoiceType.Instinct, previousUiModel: currentUiState.instinctUiModel),
+              : _createTraitUiModel(
+            ChoiceType.Instinct,
+            previousUiModel: currentUiState.instinctUiModel,
+          ),
           newPresenceUiModel: choiceType == ChoiceType.Presence
               ? newUiModel
-              : _createTraitUiModel(ChoiceType.Presence, previousUiModel: currentUiState.presenceUiModel),
+              : _createTraitUiModel(
+            ChoiceType.Presence,
+            previousUiModel: currentUiState.presenceUiModel,
+          ),
           newKnowledgeUiModel: choiceType == ChoiceType.Knowledge
               ? newUiModel
-              : _createTraitUiModel(ChoiceType.Knowledge, previousUiModel: currentUiState.knowledgeUiModel),
+              : _createTraitUiModel(
+            ChoiceType.Knowledge,
+            previousUiModel: currentUiState.knowledgeUiModel,
+          ),
         );
       });
     }
@@ -244,7 +343,8 @@ class AddCharacterDialogViewModel extends ViewModel {
         final ChoiceUiModel? thirdDomainAbilityUiModel;
         if (choiceType == ChoiceType.ThirdDomainAbility) {
           thirdDomainAbilityUiModel = newUiModel;
-        } else if (currentUiState.subclassUiModel.selectedChild?.key == SUBCLASS_SCHOOL_OF_KNOWLEDGE) {
+        } else if (currentUiState.subclassUiModel.selectedChild?.key ==
+            SUBCLASS_SCHOOL_OF_KNOWLEDGE) {
           thirdDomainAbilityUiModel = _createChoiceUiModel(ChoiceType.ThirdDomainAbility);
         } else {
           thirdDomainAbilityUiModel = null;
@@ -276,7 +376,7 @@ class AddCharacterDialogViewModel extends ViewModel {
     });
   }
 
-  PlayerCharacter? buildPlayerCharacter() {
+  void savePlayerCharacter() async {
     final currentUiState = currentState;
     if (currentUiState is LoadedAddCharacterDialogUiState) {
       final bool isNameError = currentUiState.name.isEmpty;
@@ -290,13 +390,16 @@ class AddCharacterDialogViewModel extends ViewModel {
       final bool isInstinctUiModelError = currentUiState.instinctUiModel.selectedChild == null;
       final bool isPresenceUiModelError = currentUiState.presenceUiModel.selectedChild == null;
       final bool isKnowledgeUiModelError = currentUiState.knowledgeUiModel.selectedChild == null;
-      final bool isFirstDomainAbilityUiModelError = currentUiState.firstDomainAbilityUiModel.selectedChild == null;
-      final bool isSecondDomainAbilityUiModelError = currentUiState.secondDomainAbilityUiModel.selectedChild == null;
+      final bool isFirstDomainAbilityUiModelError =
+          currentUiState.firstDomainAbilityUiModel.selectedChild == null;
+      final bool isSecondDomainAbilityUiModelError =
+          currentUiState.secondDomainAbilityUiModel.selectedChild == null;
       final bool isThirdDomainAbilityUiModelError;
       if (currentUiState.thirdDomainAbilityUiModel == null) {
         isThirdDomainAbilityUiModelError = false;
       } else {
-        isThirdDomainAbilityUiModelError = currentUiState.thirdDomainAbilityUiModel!.selectedChild == null;
+        isThirdDomainAbilityUiModelError =
+            currentUiState.thirdDomainAbilityUiModel!.selectedChild == null;
       }
 
       if (isNameError ||
@@ -327,7 +430,9 @@ class AddCharacterDialogViewModel extends ViewModel {
           newUiState = newUiState.copy(newAncestryUiModel: newUiState.ancestryUiModel.withError());
         }
         if (isCommunityUiModelError) {
-          newUiState = newUiState.copy(newCommunityUiModel: newUiState.communityUiModel.withError());
+          newUiState = newUiState.copy(
+            newCommunityUiModel: newUiState.communityUiModel.withError(),
+          );
         }
         if (isAgilityUiModelError) {
           newUiState = newUiState.copy(newAgilityUiModel: newUiState.agilityUiModel.withError());
@@ -345,38 +450,68 @@ class AddCharacterDialogViewModel extends ViewModel {
           newUiState = newUiState.copy(newPresenceUiModel: newUiState.presenceUiModel.withError());
         }
         if (isKnowledgeUiModelError) {
-          newUiState = newUiState.copy(newKnowledgeUiModel: newUiState.knowledgeUiModel.withError());
+          newUiState = newUiState.copy(
+            newKnowledgeUiModel: newUiState.knowledgeUiModel.withError(),
+          );
         }
         if (isFirstDomainAbilityUiModelError) {
-          newUiState = newUiState.copy(newFirstDomainAbilityUiModel: newUiState.firstDomainAbilityUiModel.withError());
+          newUiState = newUiState.copy(
+            newFirstDomainAbilityUiModel: newUiState.firstDomainAbilityUiModel.withError(),
+          );
         }
         if (isSecondDomainAbilityUiModelError) {
-          newUiState = newUiState.copy(newSecondDomainAbilityUiModel: newUiState.secondDomainAbilityUiModel.withError());
+          newUiState = newUiState.copy(
+            newSecondDomainAbilityUiModel: newUiState.secondDomainAbilityUiModel.withError(),
+          );
         }
         if (isThirdDomainAbilityUiModelError) {
-          newUiState = newUiState.copy(newThirdDomainAbilityUiModel: newUiState.thirdDomainAbilityUiModel!.withError());
+          newUiState = newUiState.copy(
+            newThirdDomainAbilityUiModel: newUiState.thirdDomainAbilityUiModel!.withError(),
+          );
         }
 
         notify(newUiState);
-        return null;
+        return;
       }
 
-      // TODO ok
+      final daggerheartClass = await _srdParser.getClass(
+          currentUiState.classUiModel.selectedChild!.key);
+      final ancestry = await _srdParser.getAncestry(
+          currentUiState.ancestryUiModel.selectedChild!.key);
+      final community = await _srdParser.getCommunity(
+          currentUiState.communityUiModel.selectedChild!.key);
+      final firstDomainAbility = await _srdParser.getAbility(
+          currentUiState.firstDomainAbilityUiModel.selectedChild!.key);
+      final secondDomainAbility = await _srdParser.getAbility(
+          currentUiState.secondDomainAbilityUiModel.selectedChild!.key);
+      final subclass = await _srdParser.getSubclass(
+          currentUiState.subclassUiModel.selectedChild!.key);
 
-      // return PlayerCharacter(
-      //   key: key,
-      //   name: name,
-      //   daggerheartClass: daggerheartClass,
-      //   level: level,
-      //   domainAbilities: domainAbilities,
-      //   subclass: subclass,
-      //   backgroundAnswers: backgroundAnswers,
-      //   notes: notes,
-      // );
+      final playerCharacter = PlayerCharacter(
+        key: _characterToUpdate?.key ?? uuid.v4(),
+        name: name,
+        daggerheartClass: daggerheartClass!,
+        ancestry: ancestry!,
+        community: community!,
+        level: _characterToUpdate?.level ?? 1,
+        domainAbilities: [firstDomainAbility!, secondDomainAbility!],
+        subclass: subclass!,
+        backgroundAnswers: [],
+        notes: [],
+      );
+
+      final saveAttempt = await _playerCharacterRepository.savePlayerCharacter(playerCharacter);
+
+      saveAttempt.onSuccess(() {
+        _eventStreamController.add(playerCharacter);
+      }).onFailure((exception) {
+        _eventStreamController.addError(exception);
+      });
     }
   }
 
-  void _updateState(LoadedAddCharacterDialogUiState? Function(LoadedAddCharacterDialogUiState) function) {
+  void _updateState(
+      LoadedAddCharacterDialogUiState? Function(LoadedAddCharacterDialogUiState) function,) {
     final currentUiState = currentState;
     if (currentUiState is LoadedAddCharacterDialogUiState) {
       final newUiState = function(currentUiState);
@@ -392,7 +527,10 @@ class AddCharacterDialogViewModel extends ViewModel {
       isEnabled: true,
       isError: previousUiModel?.isError ?? false,
       selectedChild: previousUiModel?.selectedChild,
-      children: _traitBonusList.mapToList((traitBonus) => ChoiceChildUiModel(key: traitBonus, name: _traitBonusToString(traitBonus))),
+      children: _traitBonusList.mapToList(
+            (traitBonus) =>
+            ChoiceChildUiModel(key: traitBonus, name: _traitBonusToString(traitBonus)),
+      ),
     );
   }
 

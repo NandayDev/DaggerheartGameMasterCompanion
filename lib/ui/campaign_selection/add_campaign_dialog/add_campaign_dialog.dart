@@ -58,7 +58,7 @@ class _AddCampaignDialogState extends DaggerheartState<AddCampaignDialog, AddCam
                 onPressed: () async {
                   final character = await showDialog<PlayerCharacter>(context: context, builder: (context) => const AddCharacterDialog());
                   if (character != null) {
-                    // TODO
+                    viewModel.createPlayerCharacter(character);
                   }
                 },
                 icon: const Icon(Icons.add),

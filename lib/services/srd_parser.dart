@@ -26,7 +26,12 @@ abstract class SrdParser {
 
   Future<Iterable<Ancestry>> getAllAncestries();
 
+  Future<Ancestry?> getAncestry(String key);
+
   Future<Iterable<Community>> getAllCommunities();
+
+  Future<Community?> getCommunity(String key);
+
 }
 
 class SrdParserImpl implements SrdParser {
@@ -113,43 +118,26 @@ class SrdParserImpl implements SrdParser {
 
   @override
   Future<Iterable<Ancestry>> getAllAncestries() async {
-    if (_ancestriesCache == null) {
-      final map = <String, Ancestry>{};
-      final ancestriesString = await rootBundle.loadString(_ANCESTRIES);
-      final ancestriesJson = jsonDecode(ancestriesString) as Map<String, dynamic>;
-      for (final ancestryEntry in ancestriesJson.entries) {
-        final json = ancestryEntry.value;
-        map[ancestryEntry.key] = Ancestry(
-          key: ancestryEntry.key,
-          name: json["name"],
-          description: json["description"],
-          features: _parseFeatureList(json["features"]),
-        );
-        _ancestriesCache = map;
-      }
-    }
+    await _fillAncestryCache();
     return _ancestriesCache!.values;
   }
 
   @override
+  Future<Ancestry?> getAncestry(String key) async {
+    await _fillAncestryCache();
+    return _ancestriesCache![key];
+  }
+
+  @override
   Future<Iterable<Community>> getAllCommunities() async {
-    if (_communitiesCache == null) {
-      final map = <String, Community>{};
-      final communitiesString = await rootBundle.loadString(_COMMUNITIES);
-      final communitiesJson = jsonDecode(communitiesString) as Map<String, dynamic>;
-      for (final communityEntry in communitiesJson.entries) {
-        final json = communityEntry.value;
-        map[communityEntry.key] = Community(
-          key: communityEntry.key,
-          name: json["name"],
-          description: json["description"],
-          individualDescription: json["individualDescription"],
-          communityFeature: _parseFeature(json["communityFeature"]),
-        );
-        _communitiesCache = map;
-      }
-    }
+    await _fillCommunityCache();
     return _communitiesCache!.values;
+  }
+
+  @override
+  Future<Community?> getCommunity(String key) async {
+    await _fillCommunityCache();
+    return _communitiesCache![key];
   }
 
   Future<void> _fillClassesCache() async {
@@ -219,6 +207,43 @@ class SrdParserImpl implements SrdParser {
         map[domainEntry.key] = domain;
       }
       _domainsCache = map;
+    }
+  }
+
+  Future<void> _fillAncestryCache() async {
+    if (_ancestriesCache == null) {
+      final map = <String, Ancestry>{};
+      final ancestriesString = await rootBundle.loadString(_ANCESTRIES);
+      final ancestriesJson = jsonDecode(ancestriesString) as Map<String, dynamic>;
+      for (final ancestryEntry in ancestriesJson.entries) {
+        final json = ancestryEntry.value;
+        map[ancestryEntry.key] = Ancestry(
+          key: ancestryEntry.key,
+          name: json["name"],
+          description: json["description"],
+          features: _parseFeatureList(json["features"]),
+        );
+        _ancestriesCache = map;
+      }
+    }
+  }
+
+  Future<void> _fillCommunityCache() async {
+    if (_communitiesCache == null) {
+      final map = <String, Community>{};
+      final communitiesString = await rootBundle.loadString(_COMMUNITIES);
+      final communitiesJson = jsonDecode(communitiesString) as Map<String, dynamic>;
+      for (final communityEntry in communitiesJson.entries) {
+        final json = communityEntry.value;
+        map[communityEntry.key] = Community(
+          key: communityEntry.key,
+          name: json["name"],
+          description: json["description"],
+          individualDescription: json["individualDescription"],
+          communityFeature: _parseFeature(json["communityFeature"]),
+        );
+        _communitiesCache = map;
+      }
     }
   }
 
